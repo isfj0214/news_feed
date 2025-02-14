@@ -11,6 +11,4 @@ public class JwtProperties {
     @Value("${jwt.seceret_key}")
     private String secretKey;
 
-    @Value("${jwt.passward_salt}")
-    private String passwordSalt;
 }
