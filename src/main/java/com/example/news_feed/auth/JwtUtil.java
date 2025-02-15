@@ -37,6 +37,19 @@ public class JwtUtil {
         return accessToken;
     }
 
+    public String createRefreshToken(Long memberId){
+
+        Date expiration = new Date(System.currentTimeMillis() + REFRESHTOKEN_TIME);
+
+        String accessToken = ACCESS_PREFIX_STRING + Jwts.builder()
+                .setSubject(Long.toString(memberId))
+                .setExpiration(expiration)
+                .signWith(getSigningKey())
+                .compact();
+
+        return accessToken;
+    }
+
     public boolean isTokenValid(String refreshToken){
         return false;
     }
