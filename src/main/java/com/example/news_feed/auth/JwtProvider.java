@@ -1,6 +1,5 @@
 package com.example.news_feed.auth;
 
-import com.example.news_feed.auth.repository.AccessTokenRepository;
 import com.example.news_feed.auth.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -8,17 +7,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +21,6 @@ public class JwtProvider {
 
     public static final String ACCESS_PREFIX_STRING = "Bearer ";
 
-    private final AccessTokenRepository accessTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProperties jwtProperties;
 

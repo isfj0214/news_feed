@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Getter
-@PropertySource("classpath:application-jwt/properties")
+@PropertySource("classpath:application-jwt.properties")
 public class JwtProperties {
 
-    @Value("${jwt.seceret_key}")
+    @Value("${jwt.secret_key}")
     private String secretKey;
 
 }
