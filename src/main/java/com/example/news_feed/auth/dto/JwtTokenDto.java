@@ -1,17 +1,19 @@
-package com.example.news_feed.auth.token;
+package com.example.news_feed.auth.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Builder;
 import lombok.Getter;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Getter
-public class JwtToken {
+public class JwtTokenDto {
 
     private String accessToken;
     private String refreshToken;
 
-    public JwtToken(String accessToken, String refreshToken){
+    @Builder
+    public JwtTokenDto(String accessToken, String refreshToken){
         this.accessToken = accessToken;
         this.refreshToken =refreshToken;
     }
