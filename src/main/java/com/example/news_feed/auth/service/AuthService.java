@@ -25,5 +25,7 @@ public class AuthService {
         if(!passwordEncoder.matches(loginRequestDto.getPassword(), findMember.getPassword())){
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
+
+
     }
 }
