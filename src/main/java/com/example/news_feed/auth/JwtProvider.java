@@ -2,8 +2,12 @@ package com.example.news_feed.auth;
 
 import com.example.news_feed.auth.repository.AccessTokenRepository;
 import com.example.news_feed.auth.repository.RefreshTokenRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +43,29 @@ public class JwtProvider {
                 .compact();
 
         return accessToken;
+    }
+
+    public boolean isTokenValid(String refreshToken){
+        return false;
+    }
+
+    private Claims getClaims(String token){
+        try {
+
+        } catch (ExpiredJwtException e) {
+            System.out.println("JWT 토큰이 만료되었습니다.");
+        } catch (MalformedJwtException e) {
+            System.out.println("JWT 형식이 올바르지 않습니다.");
+        } catch (SignatureException e) {
+            System.out.println("JWT 서명이 올바르지 않습니다.");
+        } catch (Exception e) {
+            System.out.println("JWT 검증 중 오류 발생.");
+        }
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     private SecretKey getSigningKey() {
