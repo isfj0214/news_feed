@@ -4,10 +4,13 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
     // 400 에러
+    JWT_ERROR("JWT 처리 중 오류가 발생했습니다.", HttpStatus.BAD_REQUEST),
 
     // 401 에러
     INVALID_PASSWORD("비밀번호가 잘못되었습니다.", HttpStatus.UNAUTHORIZED),
     LOGIN_REQUIRED("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED),
+    TOKEN_NOT_PROVIDED("토큰이 제공되지 않았습니다.", HttpStatus.UNAUTHORIZED),
+    TOKEN_EXPIRED("만료된 토큰입니다.", HttpStatus.UNAUTHORIZED),
 
     // 403
     USER_ACCESS_DENIED("유저에 대한 접근 권한이 없습니다.", HttpStatus.FORBIDDEN),

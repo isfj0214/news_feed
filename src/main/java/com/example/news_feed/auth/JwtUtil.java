@@ -1,10 +1,10 @@
 package com.example.news_feed.auth;
 
 import com.example.news_feed.auth.repository.RefreshTokenRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
+import com.example.news_feed.common.error.ErrorCode;
+import com.example.news_feed.common.error.exception.Exception400;
+import com.example.news_feed.common.error.exception.Exception401;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +52,7 @@ public class JwtUtil {
         return false;
     }
 
-    private Claims getClaims(String token){
+    public Claims getClaims(String token){
         Claims claims = null;
         try {
             claims = Jwts.parserBuilder()
@@ -61,13 +61,11 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            System.out.println("JWT 토큰이 만료되었습니다.");
-        } catch (MalformedJwtException e) {
-            System.out.println("JWT 형식이 올바르지 않습니다.");
-        } catch (SignatureException e) {
-            System.out.println("JWT 서명이 올바르지 않습니다.");
-        } catch (Exception e) {
-            System.out.println("JWT 검증 중 오류 발생.");
+            // 토큰이 만료되었습니다.
+            throw new Exception401(ErrorCode.TOKEN_EXPIRED);
+        } catch (JwtException e) {
+            // 토큰 처리중 오류가 발생
+            throw new Exception400(ErrorCode.JWT_ERROR);
         }
 
         return claims;

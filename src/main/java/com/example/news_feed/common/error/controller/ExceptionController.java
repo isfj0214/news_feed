@@ -1,9 +1,6 @@
 package com.example.news_feed.common.error.controller;
 
-import com.example.news_feed.common.error.exception.Exception401;
-import com.example.news_feed.common.error.exception.Exception403;
-import com.example.news_feed.common.error.exception.Exception404;
-import com.example.news_feed.common.error.exception.Exception409;
+import com.example.news_feed.common.error.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +11,12 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionController {
+    @ExceptionHandler
+    protected ResponseEntity<Map<String, String>> handleException401(Exception400 ex){
+        Map<String, String> errorMessage = new HashMap<>();
+        errorMessage.put("message", ex.getErrorCode().getMessage());
+        return new ResponseEntity<>(errorMessage, ex.getErrorCode().getHttpStatus());
+    }
 
     @ExceptionHandler
     protected ResponseEntity<Map<String, String>> handleException401(Exception401 ex){
