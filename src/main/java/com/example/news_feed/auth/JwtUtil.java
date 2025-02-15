@@ -19,8 +19,6 @@ public class JwtUtil {
     public static final long ACCESSTOKEN_TIME = 1000 * 60 * 30; // 30분
     public static final long REFRESHTOKEN_TIME = 1000 * 60 * 60 * 24 * 14; // 2주
 
-    public static final String ACCESS_PREFIX_STRING = "Bearer ";
-
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProperties jwtProperties;
 
@@ -28,7 +26,7 @@ public class JwtUtil {
 
         Date expiration = new Date(System.currentTimeMillis() + ACCESSTOKEN_TIME);
 
-        String accessToken = ACCESS_PREFIX_STRING + Jwts.builder()
+        String accessToken = Jwts.builder()
                 .setSubject(Long.toString(memberId))
                 .setExpiration(expiration)
                 .signWith(getSigningKey())
@@ -41,7 +39,7 @@ public class JwtUtil {
 
         Date expiration = new Date(System.currentTimeMillis() + REFRESHTOKEN_TIME);
 
-        String accessToken = ACCESS_PREFIX_STRING + Jwts.builder()
+        String accessToken = Jwts.builder()
                 .setSubject(Long.toString(memberId))
                 .setExpiration(expiration)
                 .signWith(getSigningKey())
