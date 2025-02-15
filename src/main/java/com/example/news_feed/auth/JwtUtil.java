@@ -15,7 +15,7 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class JwtProvider {
+public class JwtUtil {
     public static final long ACCESSTOKEN_TIME = 1000 * 60 * 30; // 30분
     public static final long REFRESHTOKEN_TIME = 1000 * 60 * 60 * 24 * 14; // 2주
 
