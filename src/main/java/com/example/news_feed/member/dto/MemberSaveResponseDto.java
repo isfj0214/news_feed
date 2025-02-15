@@ -1,6 +1,7 @@
 package com.example.news_feed.member.dto;
 
 import com.example.news_feed.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,7 +12,9 @@ public class MemberSaveResponseDto {
     private final Long id;
     private final String name;
     private final String email;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private final LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private final LocalDateTime updatedAt;
 
     @Builder
