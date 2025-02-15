@@ -53,8 +53,13 @@ public class JwtUtil {
     }
 
     private Claims getClaims(String token){
+        Claims claims = null;
         try {
-
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (ExpiredJwtException e) {
             System.out.println("JWT 토큰이 만료되었습니다.");
         } catch (MalformedJwtException e) {
@@ -64,11 +69,8 @@ public class JwtUtil {
         } catch (Exception e) {
             System.out.println("JWT 검증 중 오류 발생.");
         }
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+
+        return claims;
     }
 
     private SecretKey getSigningKey() {
