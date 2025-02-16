@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +29,11 @@ public class JwtUtil {
 
         Date expiration = new Date(System.currentTimeMillis() + ACCESSTOKEN_TIME);
 
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("access", "access");
+
         String accessToken = Jwts.builder()
+                .setClaims(claims)
                 .setSubject(Long.toString(memberId))
                 .setExpiration(expiration)
                 .signWith(getSigningKey())
@@ -40,7 +46,11 @@ public class JwtUtil {
 
         Date expiration = new Date(System.currentTimeMillis() + REFRESHTOKEN_TIME);
 
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("refresh", "refresh");
+
         String accessToken = Jwts.builder()
+                .setClaims(claims)
                 .setSubject(Long.toString(memberId))
                 .setExpiration(expiration)
                 .signWith(getSigningKey())
@@ -57,7 +67,16 @@ public class JwtUtil {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+
+            if(claims.get("access") == null){
+                throw new Exception401(ErrorCode.ACCESS_TOKEN_REQUIRED);
+            }
         } catch (ExpiredJwtException e) {
+
+            if(e.getClaims().get("access") == null){
+                throw new Exception401(ErrorCode.ACCESS_TOKEN_REQUIRED);
+            }
+
             // 토큰이 만료되었습니다.
             throw new Exception401(ErrorCode.ACCESS_TOKEN_EXPIRED);
         } catch (JwtException e) {
@@ -76,7 +95,16 @@ public class JwtUtil {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+
+            if(claims.get("refresh") == null){
+                throw new Exception401(ErrorCode.REFRESH_TOKEN_REQUIRED);
+            }
         } catch (ExpiredJwtException e) {
+
+            if(e.getClaims().get("refresh") == null){
+                throw new Exception401(ErrorCode.REFRESH_TOKEN_REQUIRED);
+            }
+
             throw e;
         } catch (JwtException e) {
             // 토큰 처리중 오류가 발생

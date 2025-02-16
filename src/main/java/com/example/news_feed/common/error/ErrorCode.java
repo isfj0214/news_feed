@@ -13,6 +13,8 @@ public enum ErrorCode {
     TOKEN_NOT_PROVIDED("토큰이 제공되지 않았습니다.", HttpStatus.UNAUTHORIZED),
     ACCESS_TOKEN_EXPIRED("만료된 ACCESS 토큰입니다.", HttpStatus.UNAUTHORIZED),
     REFRESH_TOKEN_EXPIRED("만료된 REFRESH 토큰입니다.", HttpStatus.UNAUTHORIZED),
+    ACCESS_TOKEN_REQUIRED("ACCESS 토큰이 필요합니다.", HttpStatus.UNAUTHORIZED),
+    REFRESH_TOKEN_REQUIRED("REFRESH 토큰이 필요합니다.", HttpStatus.UNAUTHORIZED),
 
     // 403
     USER_ACCESS_DENIED("유저에 대한 접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
