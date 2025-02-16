@@ -39,12 +39,14 @@ public class AuthInterceptor implements HandlerInterceptor {
                 }
                 request.setAttribute("memberId", claims.getSubject());
             }
-            else if(strs[strs.length-1].equals("members") && method.equals("PATCH")){
-
+            else if(strs[strs.length-1].equals("members") && method.equals("PATCH") || method.equals("DELETE")){
+                Claims claims = jwtUtil.getClaims(token);
+                if(claims.get("error") != null){
+                    throw (Exception401)claims.get("error");
+                }
+                request.setAttribute("memberId", claims.getSubject());
             }
-            else if(strs[strs.length-1].equals("members") && method.equals("DELETE")){
 
-            }
         }
         else{
             throw new Exception401(ErrorCode.TOKEN_NOT_PROVIDED);

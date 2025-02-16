@@ -113,7 +113,6 @@ public class JwtUtil {
         return claims;
     }
 
-    @Transactional
     public Claims getClaims(String token){
         if(token.startsWith("access ")){
             // 엑세스 토큰이면 까서 만료되었으면 예외던져짐
