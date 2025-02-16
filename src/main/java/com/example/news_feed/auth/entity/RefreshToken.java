@@ -4,9 +4,11 @@ import com.example.news_feed.common.base.BaseEntity;
 import com.example.news_feed.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class RefreshToken extends BaseEntity {
     @Id

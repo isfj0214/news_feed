@@ -8,9 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
-    boolean existsByMember(Member member);
+
+    Optional<RefreshToken> findByMember(Member member);
 
     @Modifying
     @Query("DELETE FROM RefreshToken r WHERE r.member.memberId = :memberId")

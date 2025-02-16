@@ -10,9 +10,11 @@ import com.example.news_feed.common.error.ErrorCode;
 import com.example.news_feed.common.error.exception.Exception401;
 import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.common.error.exception.Exception409;
+import com.example.news_feed.common.error.exception.RecreateAccessTokenException;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +35,16 @@ public class AuthService {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
 
-        if(refreshTokenRepository.existsByMember(findMember)){
-            throw new Exception409(ErrorCode.ALREADY_LOGGED_IN);
+        RefreshToken findRefreshToken = refreshTokenRepository.findByMember(findMember).orElse(null);
+        if(findRefreshToken != null){
+            try{
+                jwtUtil.getRefreshTokenClaims(findRefreshToken.getToken());
+                // 만약 db에 저장된 토큰이 만료되지 않았으면 이미 로그인 되어있다고 예외 던짐
+                throw new Exception409(ErrorCode.ALREADY_LOGGED_IN);
+            }catch (ExpiredJwtException e){
+                // db에 저장된 토큰이 만료되었으면 해당 토큰을 삭제하고 진행
+                refreshTokenRepository.deleteByMemberId(findMember.getMemberId());
+            }
         }
 
         String accessToken = jwtUtil.createAccessToken(findMember.getMemberId());
@@ -56,4 +66,5 @@ public class AuthService {
     public void logout(Long memberId){
         refreshTokenRepository.deleteByMemberId(memberId);
     }
+
 }

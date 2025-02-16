@@ -12,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
@@ -23,9 +26,14 @@ public class AuthController {
     }
 
     @PostMapping("/api/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest httpServletRequest){
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest httpServletRequest){
+
         String memberId = (String)httpServletRequest.getAttribute("memberId");
         authService.logout(Long.parseLong(memberId));
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        Map<String, String> message = new HashMap<>();
+        message.put("message", "로그아웃 되었습니다.");
+
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 }

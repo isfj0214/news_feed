@@ -1,6 +1,7 @@
 package com.example.news_feed.common.error.controller;
 
 import com.example.news_feed.common.error.exception.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,5 +54,12 @@ public class ExceptionController {
                 errors.put(error.getField(), error.getDefaultMessage())
         );
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler
+    protected ResponseEntity<Map<String, String>> handleRecreateAccessTokenException(RecreateAccessTokenException ex){
+        Map<String, String> errorMessage = new HashMap<>();
+        errorMessage.put("access_token", ex.getAccessToken());
+        return new ResponseEntity<>(errorMessage, HttpStatus.OK);
     }
 }

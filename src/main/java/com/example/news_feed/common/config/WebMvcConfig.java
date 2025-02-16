@@ -1,6 +1,7 @@
 package com.example.news_feed.common.config;
 
 import com.example.news_feed.auth.JwtUtil;
+import com.example.news_feed.auth.service.AuthService;
 import com.example.news_feed.common.interceptor.AuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
