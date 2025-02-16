@@ -1,7 +1,7 @@
 package com.example.news_feed.member.controller;
 
-import com.example.news_feed.member.dto.MemberSaveRequestDto;
-import com.example.news_feed.member.dto.MemberSaveResponseDto;
+import com.example.news_feed.member.dto.request.MemberSaveRequestDto;
+import com.example.news_feed.member.dto.response.MemberSaveResponseDto;
 import com.example.news_feed.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

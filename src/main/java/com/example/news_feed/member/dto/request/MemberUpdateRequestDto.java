@@ -1,9 +1,9 @@
-package com.example.news_feed.member.dto;
+package com.example.news_feed.member.dto.request;
 
 import lombok.Getter;
 
 @Getter
-public class MemberSaveRequestDto {
+public class MemberUpdateRequestDto {
     private String name;
     private String email;
     private String password;
