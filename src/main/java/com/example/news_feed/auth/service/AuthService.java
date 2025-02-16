@@ -35,6 +35,10 @@ public class AuthService {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
 
+        String accessToken = jwtUtil.createAccessToken(findMember.getMemberId());
+        String refreshToken = jwtUtil.createRefreshToken(findMember.getMemberId());
+        boolean saveFlag = true;
+
         RefreshToken findRefreshToken = refreshTokenRepository.findByMember(findMember).orElse(null);
         if(findRefreshToken != null){
             try{
@@ -42,19 +46,18 @@ public class AuthService {
                 // 만약 db에 저장된 토큰이 만료되지 않았으면 이미 로그인 되어있다고 예외 던짐
                 throw new Exception409(ErrorCode.ALREADY_LOGGED_IN);
             }catch (ExpiredJwtException e){
-                // db에 저장된 토큰이 만료되었으면 해당 토큰을 삭제하고 진행
-                refreshTokenRepository.deleteByMemberId(findMember.getMemberId());
+                // db에 저장된 토큰이 만료되었으면 해당 토큰을 업데이트
+                findRefreshToken.updateToken(refreshToken);
+                saveFlag = false;
             }
         }
 
-        String accessToken = jwtUtil.createAccessToken(findMember.getMemberId());
-        String refreshToken = jwtUtil.createRefreshToken(findMember.getMemberId());
-
-        refreshTokenRepository.save(RefreshToken.builder()
-                .token(refreshToken)
-                .member(findMember)
-                .build());
-
+        if(saveFlag){
+            refreshTokenRepository.save(RefreshToken.builder()
+                    .token(refreshToken)
+                    .member(findMember)
+                    .build());
+        }
 
         return JwtTokenDto.builder()
                 .accessToken(accessToken)
@@ -66,5 +69,4 @@ public class AuthService {
     public void logout(Long memberId){
         refreshTokenRepository.deleteByMemberId(memberId);
     }
-
 }

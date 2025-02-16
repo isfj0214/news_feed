@@ -22,7 +22,6 @@ public class JwtUtil {
     public static final long ACCESSTOKEN_TIME = 1000 * 60; //* 30; // 30분
     public static final long REFRESHTOKEN_TIME = 1000 * 60 * 2;//60 * 24 * 14; // 2주
 
-    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProperties jwtProperties;
 
     public String createAccessToken(Long memberId){
@@ -131,7 +130,6 @@ public class JwtUtil {
             }catch (ExpiredJwtException e){
                 // 만료된 refresh토큰이면 db에서 지우고 예외를 claim에 담아서 인터셉터로 전달
                 claims = e.getClaims();
-                refreshTokenRepository.deleteByMemberId(Long.parseLong(claims.getSubject()));
                 claims.put("error", new Exception401(ErrorCode.REFRESH_TOKEN_EXPIRED));
                 return claims;
             }
