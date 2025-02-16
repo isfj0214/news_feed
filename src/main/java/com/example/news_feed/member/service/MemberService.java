@@ -48,19 +48,19 @@ public class MemberService {
                 member.getModifiedAt());
     }
 
-    public MemberResponseDto update(Long id, MemberUpdateRequestDto dto) {
+    public MemberUpdateResponseDto update(Long id, MemberUpdateRequestDto dto) {
         Member member = memberRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("해당 id를 가진 회원을 찾을 수 없습니다.")
         );
         member.update(dto.getName(),dto.getEmail());
-        return new MemberResponseDto(member.getId(),
+        return new MemberUpdateResponseDto(member.getId(),
                 member.getName(),
                 member.getEmail(),
                 member.getCreatedAt(),
                 member.getModifiedAt());
     }
 
-    public void deleteById(Long id) {
+    public void deleteByIdMember(Long id) {
         memberRepository.deleteById(id);
     }
 
