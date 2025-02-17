@@ -70,4 +70,9 @@ public class FriendService {
         List<Long> friendReceivedtList = friendRepository.getFriendReceivedList(id);
         return friendReceivedtList;
     }
+
+    public List<Long> getFriendList(Long id) {
+        List<Long> friendList = friendRepository.getFriendList(id);
+        return friendList;
+    }
 }
