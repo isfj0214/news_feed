@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/friends")
 @RequiredArgsConstructor
@@ -38,6 +40,11 @@ public class FriendController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    // 친구 신청을 건 목록 보기
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Long>> getFriendRequestList(@PathVariable Long id){
+        List<Long> friendRequestList = friendService.getFriendRequestList(id);
+        return new ResponseEntity<>(friendRequestList, HttpStatus.OK);
+    }
 
 }

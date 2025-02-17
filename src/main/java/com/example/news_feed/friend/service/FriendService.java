@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class FriendService {
@@ -51,13 +53,16 @@ public class FriendService {
     @Transactional
     public void accept(FriendAcceptRequestDto acceptRequestDto) {
         // to_id 를 가져오기 위한 멤버 객체
-        //TODO : 튜터님께 여쭤보기, 쿼리가 좀 그럼
-        Member toMember = memberRepository.findById(acceptRequestDto.getToId()).orElseThrow(() -> new RuntimeException("회원 없음"));
-        Friend friend = friendRepository.findByFromIdAndMember(acceptRequestDto.getFromId(), toMember);
-        friend.update(true);
+//        Member toMember = memberRepository.findById(acceptRequestDto.getToId()).orElseThrow(() -> new RuntimeException("회원 없음"));
+//        Friend friend = friendRepository.findByFromIdAndMember(acceptRequestDto.getFromId(), toMember);
+//        friend.update(true);
 
         friendRepository.acceptFriendRequest(acceptRequestDto.getFromId(), acceptRequestDto.getToId());
     }
 
 
+    public List<Long> getFriendRequestList(Long id) {
+        List<Long> friendRequestList = friendRepository.getFriendRequestList(id);
+        return friendRequestList;
+    }
 }

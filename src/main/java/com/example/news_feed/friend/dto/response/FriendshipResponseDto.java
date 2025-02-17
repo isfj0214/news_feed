@@ -13,4 +13,5 @@ public class FriendshipResponseDto {
         this.fromId = fromId;
         this.toId = toId;
     }
+
 }
