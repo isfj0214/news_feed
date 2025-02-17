@@ -17,4 +17,9 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
     void deleteFriendship(@Param("fromId") Long fromId, @Param("toId") Long toId);
 
     Friend findByFromIdAndMember(Long fromId, Member member);
+
+    @Modifying
+    @Query("UPDATE Friend f SET f.isFriend = TRUE WHERE f.fromId = :fromId AND f.member.id = :toId")
+    void acceptFriendRequest(@Param("fromId") Long fromId, @Param("toId") Long toId);
+
 }

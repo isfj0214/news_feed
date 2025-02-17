@@ -55,5 +55,9 @@ public class FriendService {
         Member toMember = memberRepository.findById(acceptRequestDto.getToId()).orElseThrow(() -> new RuntimeException("회원 없음"));
         Friend friend = friendRepository.findByFromIdAndMember(acceptRequestDto.getFromId(), toMember);
         friend.update(true);
+
+        friendRepository.acceptFriendRequest(acceptRequestDto.getFromId(), acceptRequestDto.getToId());
     }
+
+
 }
