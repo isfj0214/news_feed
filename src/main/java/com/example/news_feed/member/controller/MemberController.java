@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members")
+
 public class MemberController {
 
     private final MemberService memberService;
 
+    // 회원 추가 기능
     @PostMapping()
     public ResponseEntity<MemberSaveResponseDto> save(@RequestBody MemberSaveRequestDto reqeustDto){
         MemberSaveResponseDto memberSaveResponseDto = memberService.save(reqeustDto);

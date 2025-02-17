@@ -1,0 +1,10 @@
+package com.example.news_feed.comment.dto.request;
+
+import lombok.Getter;
+
+@Getter
+public class CommentUpdateRequestDto {
+    private Long id;
+    private String password;
+    private String contents;
+}
