@@ -1,5 +1,6 @@
 package com.example.news_feed.friend.controller;
 
+import com.example.news_feed.friend.dto.request.FriendAcceptRequestDto;
 import com.example.news_feed.friend.dto.request.FriendshipCancelDto;
 import com.example.news_feed.friend.dto.request.FriendshipRequestDto;
 import com.example.news_feed.friend.dto.response.FriendshipResponseDto;
@@ -8,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/friends")
@@ -33,5 +31,11 @@ public class FriendController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 친구 신청 수락하기
+    @PatchMapping()
+    public ResponseEntity<Void> accept(@RequestBody FriendAcceptRequestDto acceptRequestDto){
+        friendService.accept(acceptRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

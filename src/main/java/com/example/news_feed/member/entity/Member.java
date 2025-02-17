@@ -3,6 +3,7 @@ package com.example.news_feed.member.entity;
 import com.example.news_feed.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
@@ -30,4 +31,6 @@ public class Member extends BaseEntity {
 
     public Member() {
     }
+
+
 }

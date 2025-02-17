@@ -30,4 +30,8 @@ public class Friend extends BaseEntity {
         this.isFriend = isFriend;
     }
 
+    public void update(Boolean isFriend) {
+        this.isFriend = isFriend;
+    }
+
 }

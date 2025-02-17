@@ -1,5 +1,6 @@
 package com.example.news_feed.friend.service;
 
+import com.example.news_feed.friend.dto.request.FriendAcceptRequestDto;
 import com.example.news_feed.friend.dto.request.FriendshipCancelDto;
 import com.example.news_feed.friend.dto.request.FriendshipRequestDto;
 import com.example.news_feed.friend.dto.response.FriendshipResponseDto;
@@ -39,9 +40,20 @@ public class FriendService {
                                     .build();
     }
 
+    @Transactional
     public void cancel(FriendshipCancelDto friendshipCancelDto) {
         memberRepository.findById(friendshipCancelDto.getFromId()).orElseThrow(() -> new RuntimeException("회원 없음"));
         memberRepository.findById(friendshipCancelDto.getToId()).orElseThrow(() -> new RuntimeException("회원 없음"));
         friendRepository.deleteFriendship(friendshipCancelDto.getToId(), friendshipCancelDto.getFromId());
+    }
+
+
+    @Transactional
+    public void accept(FriendAcceptRequestDto acceptRequestDto) {
+        // to_id 를 가져오기 위한 멤버 객체
+        //TODO : 튜터님께 여쭤보기, 쿼리가 좀 그럼
+        Member toMember = memberRepository.findById(acceptRequestDto.getToId()).orElseThrow(() -> new RuntimeException("회원 없음"));
+        Friend friend = friendRepository.findByFromIdAndMember(acceptRequestDto.getFromId(), toMember);
+        friend.update(true);
     }
 }
