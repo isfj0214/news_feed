@@ -57,6 +57,11 @@ public class MemberService {
         Member member = memberRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("해당 id를 가진 회원을 찾을 수 없습니다.")
         );
+
+        if (!member.getPassword().equals(dto.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
         member.update(dto.getName(),dto.getEmail());
         return new MemberUpdateResponseDto(
                 member.getId(),
