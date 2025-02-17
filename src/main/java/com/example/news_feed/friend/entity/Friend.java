@@ -16,12 +16,18 @@ public class Friend extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fromId;
+    private Long fromId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "to_id")
     private Member member;
 
     private Boolean isFriend;
+
+    public Friend(Long fromId, Member member, Boolean isFriend) {
+        this.fromId = fromId;
+        this.member = member;
+        this.isFriend = isFriend;
+    }
 
 }
