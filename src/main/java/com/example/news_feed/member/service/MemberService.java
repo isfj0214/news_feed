@@ -20,6 +20,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public MemberSaveResponseDto save(MemberSaveRequestDto requestDto) {
+
+        if (memberRepository.existsByEmail(requestDto.getEmail())) {
+            throw new IllegalArgumentException("이미 사용 중인 email입니다.");
+        }
+
         Member member = new Member(requestDto.getName(), requestDto.getEmail(), requestDto.getPassword());
         Member savedMember = memberRepository.save(member);
         return MemberSaveResponseDto.buildDto(savedMember);
@@ -53,7 +58,8 @@ public class MemberService {
                 ()-> new IllegalArgumentException("해당 id를 가진 회원을 찾을 수 없습니다.")
         );
         member.update(dto.getName(),dto.getEmail());
-        return new MemberUpdateResponseDto(member.getId(),
+        return new MemberUpdateResponseDto(
+                member.getId(),
                 member.getName(),
                 member.getEmail(),
                 member.getCreatedAt(),
@@ -61,6 +67,9 @@ public class MemberService {
     }
 
     public void deleteByIdMember(Long id) {
+        if (!memberRepository.existsById(id)) {
+            throw new IllegalArgumentException("해당 id를 가진 회원을 찾을 수 없습니다.");
+        }
         memberRepository.deleteById(id);
     }
 
