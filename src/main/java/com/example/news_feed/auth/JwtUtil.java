@@ -19,8 +19,8 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
-    public static final long ACCESSTOKEN_TIME = 1000 * 60; //* 30; // 30분
-    public static final long REFRESHTOKEN_TIME = 1000 * 60 * 2;//60 * 24 * 14; // 2주
+    public static final long ACCESSTOKEN_TIME = 1000 * 60 * 30; // 30분
+    public static final long REFRESHTOKEN_TIME = 1000 * 60 * 60 * 24 * 14; // 2주
 
     private final JwtProperties jwtProperties;
 
@@ -104,7 +104,7 @@ public class JwtUtil {
                 throw new Exception401(ErrorCode.REFRESH_TOKEN_REQUIRED);
             }
 
-            throw e;
+            throw new Exception401(ErrorCode.REFRESH_TOKEN_EXPIRED);
         } catch (JwtException e) {
             // 토큰 처리중 오류가 발생
             throw new Exception400(ErrorCode.JWT_ERROR);
@@ -119,19 +119,11 @@ public class JwtUtil {
             return getAccessTokenClaims(token.replace("access ", ""));
         }
         else{
-            Claims claims = null;
-            try{
-                claims = getRefreshTokenClaims(token.replace("refresh ", ""));
-                // refreshToken 이 만료되지 않았으므로 accessToken을 만들어서 보내줘야됨
-                Long memberId = Long.parseLong(claims.getSubject());
-                String accessToken = createAccessToken(memberId);
-                throw new RecreateAccessTokenException(accessToken);
-            }catch (ExpiredJwtException e){
-                // 만료된 refresh토큰이면 db에서 지우고 예외를 claim에 담아서 인터셉터로 전달
-                claims = e.getClaims();
-                claims.put("error", new Exception401(ErrorCode.REFRESH_TOKEN_EXPIRED));
-                return claims;
-            }
+            Claims claims = getRefreshTokenClaims(token.replace("refresh ", ""));
+            // refreshToken 이 만료되지 않았으므로 accessToken을 만들어서 보내줘야됨
+            Long memberId = Long.parseLong(claims.getSubject());
+            String accessToken = createAccessToken(memberId);
+            throw new RecreateAccessTokenException(accessToken);
         }
     }
 
