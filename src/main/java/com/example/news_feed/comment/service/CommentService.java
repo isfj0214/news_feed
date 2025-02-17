@@ -34,12 +34,13 @@ public class CommentService {
         return new CommentResponseDto(comment.getContents(),comment.getMember());
     }
 
+    //(본인이) 쓴 댓글만 조회
+
+
     //댓글 전체 조회
     public List<CommentResponseDto> findAll() {
         return commentRepository.findAll().stream().map(CommentResponseDto::toDto).toList();
     }
-
-    //(본인이)좋아요 누른 댓글만 조회
 
     //댓글 수정
     @Transactional
@@ -55,7 +56,6 @@ public class CommentService {
         findComment.setContents(contents);
     }
 
-
     //댓글 삭제
     public void deleteComment(Long id) {
         Comment findComment = commentRepository.findByIdOrElseThrow(id);
@@ -63,9 +63,4 @@ public class CommentService {
         commentRepository.delete(findComment);
 
     }
-
-
-    //댓글 좋아요 누르기
-
-    //댓글 좋아요 취소(삭제)
 }

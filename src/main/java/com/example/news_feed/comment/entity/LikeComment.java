@@ -7,9 +7,8 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "comments")
-public class Comment extends BaseEntity {
-
+@Table(name = "likecomments")
+public class LikeComment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,21 +20,9 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    //게시물 외래키 추가
 
 
-    public Comment(String contents, Member member) {
+    //게시물 추가
 
-    }
-
-    public Comment()
-    {
-
-    }
-
-    public void setContents(String contents)
-    {
-        this.contents = contents;
-    }
 
 }

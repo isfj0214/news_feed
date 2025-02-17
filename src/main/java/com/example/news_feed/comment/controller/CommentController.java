@@ -33,7 +33,10 @@ public class CommentController {
         return new ResponseEntity<>(commentResponseDto,HttpStatus.OK);
     }
 
-    //(본인이)좋아요 누른 댓글만 조회
+    //(본인이) 쓴 댓글만 조회
+    //@GetMapping
+    //public ResponseEntity<List<CommentResponseDto>> commentFindByUser(@PathVariable)
+
 
     //댓글 전체 조회
     @GetMapping
@@ -60,7 +63,5 @@ public class CommentController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    //댓글 좋아요 누르기
 
-    //댓글 좋아요 취소(삭제)
 }
