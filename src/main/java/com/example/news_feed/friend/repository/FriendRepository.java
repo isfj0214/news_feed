@@ -34,4 +34,12 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
             " AND r.member.id = :memberId AND r.isFriend = False")
     List<Long> getFriendRequestList(@Param("memberId") Long memberId);
 
+    @Query("SELECT f.fromId " +
+            "FROM Friend f " +
+            "INNER JOIN Friend r " +
+            "ON f.fromId = r.member.id AND r.fromId = f.member.id" +
+            " WHERE f.member.id = :memberId AND f.isFriend = True" +
+            " AND r.fromId = :memberId AND r.isFriend = False")
+    List<Long> getFriendReceivedList(@Param("memberId") Long memberId);
+
 }

@@ -41,9 +41,16 @@ public class FriendController {
     }
 
     // 친구 신청을 건 목록 보기
-    @GetMapping("/{id}")
+    @GetMapping("/request_info/{id}")
     public ResponseEntity<List<Long>> getFriendRequestList(@PathVariable Long id){
         List<Long> friendRequestList = friendService.getFriendRequestList(id);
+        return new ResponseEntity<>(friendRequestList, HttpStatus.OK);
+    }
+
+    // 친구 신청을 받은 목록 보기
+    @GetMapping("/received_info/{id}")
+    public ResponseEntity<List<Long>> getFriendReceivedList(@PathVariable Long id){
+        List<Long> friendRequestList = friendService.getFriendReceivedList(id);
         return new ResponseEntity<>(friendRequestList, HttpStatus.OK);
     }
 
