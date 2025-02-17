@@ -17,6 +17,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor(jwtUtil))
                 .addPathPatterns("/api/logout")
+                .addPathPatterns("/api/members","/api/members/*")
+                .addPathPatterns("/api/posts", "/api/posts/*")
+                .addPathPatterns("/api/friends", "/api/friends/*")
                 .order(1);
     }
 }
