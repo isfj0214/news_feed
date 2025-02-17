@@ -1,5 +1,6 @@
 package com.example.news_feed.friend.service;
 
+import com.example.news_feed.friend.dto.request.FriendshipCancelDto;
 import com.example.news_feed.friend.dto.request.FriendshipRequestDto;
 import com.example.news_feed.friend.dto.response.FriendshipResponseDto;
 import com.example.news_feed.friend.entity.Friend;
@@ -36,5 +37,11 @@ public class FriendService {
                                     .fromId(savedFriend.getFromId())
                                     .toId(savedFriend.getMember().getId())
                                     .build();
+    }
+
+    public void cancel(FriendshipCancelDto friendshipCancelDto) {
+        memberRepository.findById(friendshipCancelDto.getFromId()).orElseThrow(() -> new RuntimeException("회원 없음"));
+        memberRepository.findById(friendshipCancelDto.getToId()).orElseThrow(() -> new RuntimeException("회원 없음"));
+        friendRepository.deleteFriendship(friendshipCancelDto.getToId(), friendshipCancelDto.getFromId());
     }
 }
