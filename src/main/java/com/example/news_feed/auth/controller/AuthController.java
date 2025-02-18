@@ -11,21 +11,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public ResponseEntity<JwtTokenDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto){
         return new ResponseEntity<>(authService.login(loginRequestDto),HttpStatus.OK);
     }
 
-    @PostMapping("/api/logout")
+    @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletRequest httpServletRequest){
 
         String memberId = (String)httpServletRequest.getAttribute("memberId");
@@ -37,7 +39,7 @@ public class AuthController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
-    @PostMapping("/api/refresh")
+    @PostMapping("/refresh")
     public ResponseEntity<JwtTokenDto> getToken(HttpServletRequest httpServletRequest){
 
         String refreshToken = (String)httpServletRequest.getAttribute("refreshToken");

@@ -1,4 +1,4 @@
-package com.example.news_feed.member.dto;
+package com.example.news_feed.member.dto.response;
 
 import com.example.news_feed.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
