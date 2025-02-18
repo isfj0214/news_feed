@@ -6,6 +6,7 @@ import com.example.news_feed.member.dto.response.MemberResponseDto;
 import com.example.news_feed.member.dto.response.MemberSaveResponseDto;
 import com.example.news_feed.member.dto.response.MemberUpdateResponseDto;
 import com.example.news_feed.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,22 +34,22 @@ public class MemberController {
         return ResponseEntity.ok(memberService.findAllMember());
     }
 
-    @GetMapping("/members/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<MemberResponseDto> findByIdMember(@PathVariable Long id) {
         return ResponseEntity.ok(memberService.findByIdMember(id));
     }
 
-    @PutMapping("/members/{id}")
-    public ResponseEntity<MemberUpdateResponseDto> update(
-            @PathVariable Long id,
-            @RequestBody MemberUpdateRequestDto dto) {
-        MemberUpdateResponseDto updatedMember = memberService.update(id,dto);
+    @PatchMapping
+    public ResponseEntity<MemberUpdateResponseDto> update(@RequestBody MemberUpdateRequestDto dto, HttpServletRequest httpServletRequest) {
+        Long memberId = Long.parseLong((String)httpServletRequest.getAttribute("memberId"));
+        MemberUpdateResponseDto updatedMember = memberService.update(memberId,dto);
         return ResponseEntity.ok(updatedMember);
     }
 
-    @DeleteMapping("/members/{id}")
-    public void delete(@PathVariable Long id) {
-        memberService.deleteByIdMember(id);
+    @DeleteMapping
+    public void delete(HttpServletRequest httpServletRequest) {
+        Long memberId = Long.parseLong((String)httpServletRequest.getAttribute("memberId"));
+        memberService.deleteByIdMember(memberId);
     }
 
 }

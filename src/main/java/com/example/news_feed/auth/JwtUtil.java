@@ -19,8 +19,8 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
-    public static final long ACCESSTOKEN_TIME = 1000 * 60;// * 5; // 30분
-    public static final long REFRESHTOKEN_TIME = 1000 * 60 * 2; //* 60 * 24 * 14; // 2주
+    public static final long ACCESSTOKEN_TIME = 1000 * 60 * 30; // 30분
+    public static final long REFRESHTOKEN_TIME = 1000 * 60 * 60 * 24 * 14; // 2주
 
     private final JwtProperties jwtProperties;
 

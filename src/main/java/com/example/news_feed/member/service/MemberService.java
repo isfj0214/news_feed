@@ -11,6 +11,8 @@ import com.example.news_feed.member.dto.response.MemberSaveResponseDto;
 import com.example.news_feed.member.dto.response.MemberUpdateResponseDto;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EntityManager entityManager;
 
     @Transactional
     public MemberSaveResponseDto save(MemberSaveRequestDto requestDto) {
@@ -72,11 +75,10 @@ public class MemberService {
                 ()-> new Exception404(ErrorCode.MEMBER_NOT_FOUND)
         );
 
-        if (!member.getPassword().equals(dto.getPassword())) {
-            throw new Exception404(ErrorCode.MEMBER_NOT_FOUND);
-        }
-
         member.update(dto.getName(),dto.getEmail());
+
+        entityManager.flush();
+
         return new MemberUpdateResponseDto(
                 member.getMemberId(),
                 member.getName(),
@@ -86,7 +88,10 @@ public class MemberService {
     }
 
     public void deleteByIdMember(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(
+                ()-> new Exception404(ErrorCode.MEMBER_NOT_FOUND)
+        );
         memberRepository.deleteById(id);
     }
-    
+
 }
