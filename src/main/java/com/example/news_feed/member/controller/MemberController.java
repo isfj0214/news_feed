@@ -16,12 +16,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+
 public class MemberController {
 
     private final MemberService memberService;
 
     @PostMapping("/members")
     public ResponseEntity<MemberSaveResponseDto> save(@Valid @RequestBody MemberSaveRequestDto reqeustDto){
+
         MemberSaveResponseDto memberSaveResponseDto = memberService.save(reqeustDto);
         return new ResponseEntity<>(memberSaveResponseDto, HttpStatus.CREATED);
     }
