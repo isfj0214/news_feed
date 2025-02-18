@@ -9,6 +9,7 @@ import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional
     public MemberSaveResponseDto save(MemberSaveRequestDto requestDto) {
 
         if (memberRepository.existsByEmail(requestDto.getEmail())) {
@@ -30,6 +32,7 @@ public class MemberService {
         return MemberSaveResponseDto.buildDto(savedMember);
     }
 
+    @Transactional(readOnly = true)
     public List<MemberResponseDto> findAllMember() {
         return memberRepository.findAll().stream()
                 .map(member -> new MemberResponseDto(
@@ -41,6 +44,7 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public MemberResponseDto findByIdMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("해당 id를 가진 회원을 찾을 수 없습니다.")
@@ -53,6 +57,7 @@ public class MemberService {
                 member.getModifiedAt());
     }
 
+    @Transactional
     public MemberUpdateResponseDto update(Long id, MemberUpdateRequestDto dto) {
         Member member = memberRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("해당 id를 가진 회원을 찾을 수 없습니다.")
