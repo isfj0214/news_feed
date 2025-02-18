@@ -20,6 +20,9 @@ public class LikeComment extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne
+    @JoinColumn(name="comment_id")
+    private Comment comment;
 
 
     //게시물 추가

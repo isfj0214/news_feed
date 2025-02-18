@@ -22,7 +22,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommentResponseDto> commentSave(@RequestBody CommentRequestDto requestDto)
     {
-        CommentResponseDto commentSaveResponseDto = commentService.save(requestDto);
+        CommentResponseDto commentSaveResponseDto = commentService.creteComment(requestDto);
         return new ResponseEntity<>(commentSaveResponseDto, HttpStatus.CREATED);
     }
 

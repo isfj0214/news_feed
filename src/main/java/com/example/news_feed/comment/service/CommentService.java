@@ -21,7 +21,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     //댓글 작성
-    public CommentResponseDto save(CommentRequestDto requestDto) {
+    public CommentResponseDto creteComment(CommentRequestDto requestDto) {
         Comment comment = new Comment(requestDto.getContents(),requestDto.getMember());
         commentRepository.save(comment);
         return new CommentResponseDto(comment.getContents(),comment.getMember());
