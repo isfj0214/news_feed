@@ -18,8 +18,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
             "OR (f.fromId = :toId AND f.member.id = :fromId)")
     void deleteFriendship(@Param("fromId") Long fromId, @Param("toId") Long toId);
 
-    Friend findByFromIdAndMember(Long fromId, Member member);
-
     @Modifying
     @Query("UPDATE Friend f " +
             "SET f.isFriend = TRUE " +
@@ -49,4 +47,14 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
             " WHERE f.fromId = :memberId AND f.isFriend = True" +
             " AND r.member.id = :memberId AND r.isFriend = True")
     List<Long> getFriendList(@Param("memberId")Long id);
+
+    boolean existsByFromIdAndMemberId(Long fromId, Long toId);
+
+    @Query("SELECT COUNT(f) " +
+            "FROM Friend f " +
+            "INNER JOIN Friend r " +
+            "ON f.fromId = r.member.id AND r.fromId = f.member.id" +
+            " WHERE f.fromId = :fromId AND f.member.id = :toId AND f.isFriend = True" +
+            " AND r.fromId = :toId AND r.member.id = :fromId AND r.isFriend = True")
+    Long isFriend(@Param("fromId")Long fromId, @Param("toId")Long toId);
 }
