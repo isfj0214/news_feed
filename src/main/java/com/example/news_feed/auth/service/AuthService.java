@@ -10,11 +10,9 @@ import com.example.news_feed.common.error.ErrorCode;
 import com.example.news_feed.common.error.exception.Exception401;
 import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.common.error.exception.Exception409;
-import com.example.news_feed.common.error.exception.RecreateAccessTokenException;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +43,7 @@ public class AuthService {
                 jwtUtil.getRefreshTokenClaims(findRefreshToken.getToken());
                 // 만약 db에 저장된 토큰이 만료되지 않았으면 이미 로그인 되어있다고 예외 던짐
                 throw new Exception409(ErrorCode.ALREADY_LOGGED_IN);
-            }catch (ExpiredJwtException e){
+            }catch (Exception401 e){
                 // db에 저장된 토큰이 만료되었으면 해당 토큰을 업데이트
                 findRefreshToken.updateToken(refreshToken);
                 saveFlag = false;
@@ -68,5 +66,26 @@ public class AuthService {
     @Transactional
     public void logout(Long memberId){
         refreshTokenRepository.deleteByMemberId(memberId);
+    }
+
+    @Transactional
+    public JwtTokenDto refreshToken(String requestRefreshToken){
+
+        // 요청받은 토큰이 refresh 토큰인지, 만료된 토큰인지 검사
+        Claims claims = jwtUtil.getRefreshTokenClaims(requestRefreshToken);
+        String memberId = (String)claims.getSubject();
+
+        // refresh 토큰을 db에서 찾아본다. 찾지 못한다면 이는 로그아웃 된 것
+        RefreshToken findRefreshToken = refreshTokenRepository.findByToken(requestRefreshToken).orElseThrow(() -> new Exception401(ErrorCode.REFRESH_TOKEN_EXPIRED));
+
+        String accessToken = jwtUtil.createAccessToken(Long.parseLong(memberId));
+        String refreshToken = jwtUtil.createRefreshToken(Long.parseLong(memberId));
+
+        findRefreshToken.updateToken(refreshToken);
+
+        return JwtTokenDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

@@ -19,8 +19,8 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
-    public static final long ACCESSTOKEN_TIME = 1000 * 60 * 30; // 30분
-    public static final long REFRESHTOKEN_TIME = 1000 * 60 * 60 * 24 * 14; // 2주
+    public static final long ACCESSTOKEN_TIME = 1000 * 60;// * 5; // 30분
+    public static final long REFRESHTOKEN_TIME = 1000 * 60 * 2; //* 60 * 24 * 14; // 2주
 
     private final JwtProperties jwtProperties;
 
@@ -111,20 +111,6 @@ public class JwtUtil {
         }
 
         return claims;
-    }
-
-    public Claims getClaims(String token){
-        if(token.startsWith("access ")){
-            // 엑세스 토큰이면 까서 만료되었으면 예외던져짐
-            return getAccessTokenClaims(token.replace("access ", ""));
-        }
-        else{
-            Claims claims = getRefreshTokenClaims(token.replace("refresh ", ""));
-            // refreshToken 이 만료되지 않았으므로 accessToken을 만들어서 보내줘야됨
-            Long memberId = Long.parseLong(claims.getSubject());
-            String accessToken = createAccessToken(memberId);
-            throw new RecreateAccessTokenException(accessToken);
-        }
     }
 
     private SecretKey getSigningKey() {

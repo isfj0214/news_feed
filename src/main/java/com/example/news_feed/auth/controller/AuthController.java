@@ -36,4 +36,12 @@ public class AuthController {
 
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
+    @PostMapping("/api/refresh")
+    public ResponseEntity<JwtTokenDto> getToken(HttpServletRequest httpServletRequest){
+
+        String refreshToken = (String)httpServletRequest.getAttribute("refreshToken");
+        return new ResponseEntity<>(authService.refreshToken(refreshToken), HttpStatus.OK);
+        
+    }
 }
