@@ -1,5 +1,6 @@
 package com.example.news_feed.member.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import org.springframework.cglib.core.Local;
 
@@ -10,7 +11,9 @@ public class MemberResponseDto {
     private final Long id;
     private final String name;
     private final String email;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime modifiedAt;
 
     public MemberResponseDto(Long id, String name, String email, LocalDateTime createdAt, LocalDateTime modifiedAt) {
