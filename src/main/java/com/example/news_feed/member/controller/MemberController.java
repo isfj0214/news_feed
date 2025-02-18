@@ -1,5 +1,6 @@
 package com.example.news_feed.member.controller;
 
+import com.example.news_feed.auth.JwtUtil;
 import com.example.news_feed.member.dto.request.MemberSaveRequestDto;
 import com.example.news_feed.member.dto.request.MemberUpdateRequestDto;
 import com.example.news_feed.member.dto.response.MemberResponseDto;
@@ -21,29 +22,43 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<MemberSaveResponseDto> save(@Valid @RequestBody MemberSaveRequestDto requestDto){
+    public ResponseEntity<MemberSaveResponseDto> create(@Valid @RequestBody MemberSaveRequestDto requestDto){
 
-        MemberSaveResponseDto memberSaveResponseDto = memberService.save(requestDto);
+        MemberSaveResponseDto memberSaveResponseDto = memberService.create(requestDto);
         return new ResponseEntity<>(memberSaveResponseDto, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<MemberResponseDto>> findAllMember() {
+    public ResponseEntity<List<MemberResponseDto>> findAllMember(
+            @RequestHeader("Authorization")String token) {
+        String extractedToken = token.replace("Bearer","");
+        jwtUtil.getAccessTokenClaims(extractedToken); // 토큰 검증(로그인 된 사용자만 조회 가능)
+
         return ResponseEntity.ok(memberService.findAllMember());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberResponseDto> findByIdMember(@PathVariable Long id) {
-        return ResponseEntity.ok(memberService.findByIdMember(id));
+    public ResponseEntity<MemberResponseDto> findByIdMember(
+            @PathVariable Long id,
+            @RequestHeader ("Authorization") String token) {
+
+        String extractedToken = token.replace("Bearer", "");
+        Long requesterId = Long.parseLong(jwtUtil.getAccessTokenClaims(extractedToken).getSubject());
+
+        return ResponseEntity.ok(memberService.findByIdMember(id, requesterId));
     }
 
     @PatchMapping
-    public ResponseEntity<MemberUpdateResponseDto> update(@RequestBody MemberUpdateRequestDto dto, HttpServletRequest httpServletRequest) {
-        Long memberId = Long.parseLong((String)httpServletRequest.getAttribute("memberId"));
-        MemberUpdateResponseDto updatedMember = memberService.update(memberId,dto);
-        return ResponseEntity.ok(updatedMember);
+    public ResponseEntity<MemberUpdateResponseDto> update(
+            @RequestBody MemberUpdateRequestDto dto,
+            @RequestHeader("Authorization")String token) {
+
+        String extractedToken = token.replace("Bearer","");
+        Long memberId = Long.parseLong(jwtUtil.getAccessTokenClaims(extractedToken).getSubject());
+        return ResponseEntity.ok(memberService.update(memberId, dto, memberId));
     }
 
     @DeleteMapping

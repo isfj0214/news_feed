@@ -2,6 +2,7 @@ package com.example.news_feed.member.service;
 
 import com.example.news_feed.common.encode.PasswordEncoder;
 import com.example.news_feed.common.error.ErrorCode;
+import com.example.news_feed.common.error.exception.Exception403;
 import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.common.error.exception.Exception409;
 import com.example.news_feed.member.dto.request.MemberSaveRequestDto;
@@ -29,7 +30,7 @@ public class MemberService {
     private final EntityManager entityManager;
 
     @Transactional
-    public MemberSaveResponseDto save(MemberSaveRequestDto requestDto) {
+    public MemberSaveResponseDto create(MemberSaveRequestDto requestDto) {
 
         if (memberRepository.existsByEmail(requestDto.getEmail())) {
             throw new Exception409(ErrorCode.EMAIL_ALREADY_EXISTS);
@@ -48,19 +49,27 @@ public class MemberService {
                 .map(member -> new MemberResponseDto(
                         member.getMemberId(),
                         member.getName(),
-                        member.getEmail(),
-                        member.getCreatedAt(),
-                        member.getModifiedAt()))
+                        null,
+                        null,
+                        null))
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public MemberResponseDto findByIdMember(Long id) {
+    public MemberResponseDto findByIdMember(Long id, Long requesterId) {
 
         Member member = memberRepository.findById(id).orElseThrow(
                 ()-> new Exception404(ErrorCode.MEMBER_NOT_FOUND)
         );
 
+        if (!requesterId.equals(member.getMemberId())) {
+            return new MemberResponseDto(
+                    member.getMemberId(),
+                    member.getName(),
+                    null,
+                    null,
+                    null);
+        }
         return new MemberResponseDto(
                 member.getMemberId(),
                 member.getName(),
@@ -70,8 +79,14 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberUpdateResponseDto update(Long id, MemberUpdateRequestDto dto) {
-        Member member = memberRepository.findById(id).orElseThrow(
+    public MemberUpdateResponseDto update(
+            Long memberId, MemberUpdateRequestDto dto, Long requesterId) {
+
+        if (!memberId.equals(requesterId)) {
+            throw new Exception403(ErrorCode.USER_ACCESS_DENIED);
+        }
+
+        Member member = memberRepository.findById(memberId).orElseThrow(
                 ()-> new Exception404(ErrorCode.MEMBER_NOT_FOUND)
         );
 
