@@ -3,7 +3,6 @@ package com.example.news_feed.friend.dto.response;
 import com.example.news_feed.member.entity.Member;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,4 +23,5 @@ public class FriendResponseDto {
         }
         return responseDtos;
     }
+
 }

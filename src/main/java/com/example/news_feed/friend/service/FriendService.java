@@ -5,8 +5,6 @@ import com.example.news_feed.common.error.exception.Exception400;
 import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.common.error.exception.Exception409;
 import com.example.news_feed.friend.dto.request.FriendRequestAcceptDto;
-import com.example.news_feed.friend.dto.request.FriendRequestCancelDto;
-import com.example.news_feed.friend.dto.request.FriendDeleteDto;
 import com.example.news_feed.friend.dto.request.FriendRequestDto;
 import com.example.news_feed.friend.dto.response.FriendRequestResponseDto;
 import com.example.news_feed.friend.dto.response.FriendResponseDto;
@@ -53,11 +51,11 @@ public class FriendService {
     }
 
     @Transactional
-    public void cancel(FriendRequestCancelDto friendRequestCancelDto, Long memberId) {
+    public void cancel(Long toId, Long memberId) {
         memberRepository.findById(memberId).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
-        memberRepository.findById(friendRequestCancelDto.getToId()).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
-        isFriendRequestExists(memberId, friendRequestCancelDto);
-        friendRepository.deleteFriendship(friendRequestCancelDto.getToId(), memberId);
+        memberRepository.findById(toId).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
+        isFriendRequestExists(memberId, toId);
+        friendRepository.deleteFriendRequest(toId, memberId);
     }
 
     @Transactional
@@ -67,9 +65,9 @@ public class FriendService {
     }
 
     @Transactional
-    public void delete(FriendDeleteDto friendDeleteDto, Long memberId) {
-        isFriends(memberId, friendDeleteDto);
-        friendRepository.deleteFriendship(friendDeleteDto.getToId(), memberId);
+    public void delete(Long toId, Long memberId) {
+        isFriends(memberId, toId);
+        friendRepository.deleteFriendRequest(toId, memberId);
     }
 
     @Transactional(readOnly = true)
@@ -123,13 +121,13 @@ public class FriendService {
     /*
      * 검증 메서드 - 찬구 요청 취소시 검증
      */
-    private void isFriendRequestExists(Long memberId, FriendRequestCancelDto friendRequestCancelDto) {
+    private void isFriendRequestExists(Long memberId, Long toId) {
         // 존재하지 않는 친구 신청(내가 보낸 요청)을 취소하려고 하는 경우
         List<FriendResponseDto> friendRequestList = friendRepository.getFriendRequestList(memberId);
         List<Long> friendRequestIdList = friendRequestList.stream()
                 .map(FriendResponseDto::getId)
                 .collect(Collectors.toList());
-        if (!friendRequestIdList.contains(friendRequestCancelDto.getToId())){
+        if (!friendRequestIdList.contains(toId)){
             throw new Exception404(ErrorCode.FRIEND_REQUEST_NOT_FOUND);
         }
     }
@@ -148,13 +146,13 @@ public class FriendService {
     /*
      * 검증 메서드 - 찬구 삭제시 검증
      */
-    private void isFriends(Long memberId, FriendDeleteDto friendDeleteDto) {
+    private void isFriends(Long memberId, Long toId) {
         // 친구가 아닌 사람을 삭제하려고 하는 경우
         List<FriendResponseDto> friendList = friendRepository.getFriendList(memberId);
         List<Long> friendIdList = friendList.stream()
                 .map(FriendResponseDto::getId)
                 .collect(Collectors.toList());
-        if (!friendIdList.contains(friendDeleteDto.getToId())){
+        if (!friendIdList.contains(toId)){
             throw new Exception404(ErrorCode.FRIEND_NOT_FOUND);
         }
     }
