@@ -14,12 +14,14 @@ import com.example.news_feed.member.repository.MemberRepository;
 import com.example.news_feed.post.entity.Post;
 import com.example.news_feed.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -35,9 +37,8 @@ public class CommentService {
         Post post = postRepository.findById(postId).orElseThrow(() -> new Exception404(ErrorCode.POST_NOT_FOUND));
         Comment comment = new Comment(requestDto.getComment(), member, post);
         commentRepository.save(comment);
+        log.info(comment.getComment() + " " + comment.getCreatedAt() + " " + comment.getModifiedAt() + " " + comment.getLikeCount());
         return new CommentResponseDto(
-                post.getTitle(),
-                member.getEmail(),
                 comment.getComment(),
                 comment.getCreatedAt(),
                 comment.getModifiedAt(),
@@ -50,8 +51,6 @@ public class CommentService {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new Exception404(ErrorCode.COMMENT_NOT_FOUND));
 
         return new CommentResponseDto(
-                comment.getPost().getTitle(),
-                comment.getMember().getEmail(),
                 comment.getComment(),
                 comment.getCreatedAt(),
                 comment.getModifiedAt(),

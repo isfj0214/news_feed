@@ -89,9 +89,16 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new Exception404(ErrorCode.POST_NOT_FOUND)
         );
+<<<<<<< HEAD
 
         if (!memberId.equals(post.getMember().getId())) {
             throw new Exception403(POST_ACCESS_DENIED);
+=======
+        //로그인한 멤버의 id와, 해당 게시물에 같이 저장된 멤버id 비교
+        //작성한 본인만 수정할 수 있습니다. 예외코드 추가 후 변경하기!!
+        if (!memberId.equals(post.getMember().getId())) {
+            throw new Exception404(MEMBER_NOT_FOUND);
+>>>>>>> c31f1f5baa00f08c7b299c02a5f19e21ff67bbeb
         }
 
         post.update(dto.getTitle(), dto.getContent());
@@ -113,9 +120,15 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new Exception404(ErrorCode.POST_NOT_FOUND)
         );
+<<<<<<< HEAD
 
         if (!memberId.equals(post.getMember().getId())) {
             throw new Exception403(POST_ACCESS_DENIED);
+=======
+        //현재 로그인 한 유저의 엑세스 토큰의 memberId 일치 여부 확인
+        if (!memberId.equals(post.getMember().getId())) {
+            throw new Exception404(MEMBER_NOT_FOUND);
+>>>>>>> c31f1f5baa00f08c7b299c02a5f19e21ff67bbeb
         }
         postRepository.delete(post);
 
