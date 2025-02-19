@@ -28,7 +28,11 @@ public class PostLikeService {
     public void createLike(Long memberId, Long postId){
 
         Member findMember= memberRepository.findById(memberId).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
+
         Post findPost = postRepository.findById(postId).orElseThrow(() -> new Exception404(ErrorCode.POST_NOT_FOUND));
+        if(memberId.equals(findPost.getMember().getId())){
+            throw new Exception409(ErrorCode.SELF_POST_REQUEST);
+        }
 
         PostLike findPostLike = postLikeRepository.findByMember_IdAndPost_Id(memberId, postId).orElse(null);
         if(findPostLike != null){
