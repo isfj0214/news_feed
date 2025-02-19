@@ -25,6 +25,7 @@ public class LikeCommentController {
             HttpServletRequest httpServletRequest
     ) {
         Long memberId = Long.parseLong((String) httpServletRequest.getAttribute("memberId"));
+        likeCommentService.addLike(commentId,memberId);
     }
 
     //댓글 좋아요 취소(삭제)
