@@ -9,6 +9,7 @@ public enum ErrorCode {
     SELF_LIKE_REQUEST("자신의 댓글에 좋아요를 남길 수 없습니다.",HttpStatus.BAD_REQUEST),
     SELF_POST_REQUEST("자신의 포스트에 좋아요를 남길 수 없습니다.",HttpStatus.BAD_REQUEST),
     ALREADY_EXIST_LIKE_REQUEST("이미 해당 댓글에 좋아요를 눌렀습니다.",HttpStatus.BAD_REQUEST),
+    LIKE_NOT_FOUND_REQUEST("해당 게시물에 좋아요를 누르지 않았습니다.", HttpStatus.BAD_REQUEST),
 
     // 401 에러
     INVALID_PASSWORD("비밀번호가 잘못되었습니다.", HttpStatus.UNAUTHORIZED),

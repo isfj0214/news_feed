@@ -1,6 +1,7 @@
 package com.example.news_feed.post.service;
 
 import com.example.news_feed.common.error.ErrorCode;
+import com.example.news_feed.common.error.exception.Exception400;
 import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.common.error.exception.Exception409;
 import com.example.news_feed.member.entity.Member;
@@ -39,6 +40,8 @@ public class PostLikeService {
             throw new Exception409(ErrorCode.ALREADY_LIKED);
         }
 
+        findPost.addLikeCount();
+
         PostLike postLike = new PostLike(findMember, findPost);
 
         postLikeRepository.save(postLike);
@@ -61,6 +64,9 @@ public class PostLikeService {
 
         Member findMember= memberRepository.findById(memberId).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
         Post findPost = postRepository.findById(postId).orElseThrow(() -> new Exception404(ErrorCode.POST_NOT_FOUND));
+
+        PostLike findPostLike = postLikeRepository.findByMember_IdAndPost_Id(memberId, postId).orElseThrow(() -> new Exception400(ErrorCode.LIKE_NOT_FOUND_REQUEST));
+        findPost.minusLikeCount();
 
         postLikeRepository.deleteByMember_IdAndPost_Id(memberId, postId);
 
