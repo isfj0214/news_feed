@@ -3,23 +3,26 @@ package com.example.news_feed.member.entity;
 import com.example.news_feed.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "member")
+@NoArgsConstructor
+@Table(name = "members")
 public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "email",nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password",nullable = false)
     private String password;
 
     public Member(String name, String email, String password) {
@@ -28,6 +31,12 @@ public class Member extends BaseEntity {
         this.password = password;
     }
 
-    public Member() {
+    public void update(String name) {
+        this.name = name;
+    }
+
+
+    public void updatePassword(String encodePassword) {
+        this.password = encodePassword;
     }
 }
