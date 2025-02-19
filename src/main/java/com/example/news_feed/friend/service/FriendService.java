@@ -57,7 +57,7 @@ public class FriendService {
         memberRepository.findById(memberId).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
         memberRepository.findById(friendRequestCancelDto.getToId()).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
         isFriendRequestExists(memberId, friendRequestCancelDto);
-        friendRepository.deleteFriendship(friendRequestCancelDto.getToId(), memberId);
+        friendRepository.deleteFriendRequest(friendRequestCancelDto.getToId(), memberId);
     }
 
     @Transactional
@@ -69,7 +69,7 @@ public class FriendService {
     @Transactional
     public void delete(FriendDeleteDto friendDeleteDto, Long memberId) {
         isFriends(memberId, friendDeleteDto);
-        friendRepository.deleteFriendship(friendDeleteDto.getToId(), memberId);
+        friendRepository.deleteFriendRequest(friendDeleteDto.getToId(), memberId);
     }
 
     @Transactional(readOnly = true)
