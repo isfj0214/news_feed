@@ -1,9 +1,12 @@
 package com.example.news_feed.comment.entity;
 
+import com.example.news_feed.comment.dto.request.LikeCommentRequestDto;
 import com.example.news_feed.common.base.BaseEntity;
 import com.example.news_feed.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -13,16 +16,21 @@ public class LikeComment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "contents")
-    private String contents;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id", nullable = false)
+    private Comment comment;
 
 
-    //게시물 추가
-
+    public LikeComment(Member member, Comment comment) {
+        this.member = member;
+        this.comment = comment;
+    }
 
 }
