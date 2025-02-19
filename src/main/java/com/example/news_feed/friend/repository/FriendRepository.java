@@ -1,5 +1,6 @@
 package com.example.news_feed.friend.repository;
 
+import com.example.news_feed.friend.dto.response.FriendResponseDto;
 import com.example.news_feed.friend.entity.Friend;
 import com.example.news_feed.member.entity.Member;
 import jakarta.transaction.Transactional;
@@ -24,13 +25,13 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
             "WHERE f.fromId = :fromId AND f.member.id = :toId")
     void acceptFriendRequest(@Param("fromId") Long fromId, @Param("toId") Long toId);
 
-    @Query("SELECT f.member.id " +
+    @Query("SELECT new com.example.news_feed.friend.dto.response.FriendResponseDto(f.member.id, f.member.name) " +
             "FROM Friend f " +
             "INNER JOIN Friend r " +
             "ON f.fromId = r.member.id AND r.fromId = f.member.id" +
             " WHERE f.fromId = :memberId AND f.isFriend = True" +
             " AND r.member.id = :memberId AND r.isFriend = False")
-    List<Long> getFriendRequestList(@Param("memberId") Long memberId);
+    List<FriendResponseDto> getFriendRequestList(@Param("memberId") Long memberId);
 
     @Query("SELECT f.fromId " +
             "FROM Friend f " +
@@ -40,13 +41,13 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
             " AND r.fromId = :memberId AND r.isFriend = False")
     List<Long> getFriendReceivedList(@Param("memberId") Long memberId);
 
-    @Query("SELECT f.member.id " +
+    @Query("SELECT new com.example.news_feed.friend.dto.response.FriendResponseDto(f.member.id, f.member.name) " +
             "FROM Friend f " +
             "INNER JOIN Friend r " +
             "ON f.fromId = r.member.id AND r.fromId = f.member.id" +
             " WHERE f.fromId = :memberId AND f.isFriend = True" +
             " AND r.member.id = :memberId AND r.isFriend = True")
-    List<Long> getFriendList(@Param("memberId")Long id);
+    List<FriendResponseDto> getFriendList(@Param("memberId")Long id);
 
     boolean existsByFromIdAndMemberId(Long fromId, Long toId);
 
