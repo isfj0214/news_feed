@@ -5,12 +5,12 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // 400 에러
     JWT_ERROR("JWT 처리 중 오류가 발생했습니다.", HttpStatus.BAD_REQUEST),
-    JWT_FORMAT_ERROR("잘못된 토큰 형식입니다.", HttpStatus.BAD_REQUEST),
     SELF_FRIEND_REQUEST("자기 자신에게 친구 요청을 할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    SELF_LIKE_REQUEST("자신의 댓글에 좋아요를 남길 수 없습니다.",HttpStatus.BAD_REQUEST),
+    ALREADY_EXIST_LIKE_REQUEST("이미 해당 댓글에 좋아요를 눌렀습니다.",HttpStatus.BAD_REQUEST),
 
     // 401 에러
     INVALID_PASSWORD("비밀번호가 잘못되었습니다.", HttpStatus.UNAUTHORIZED),
-    LOGIN_REQUIRED("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED),
     TOKEN_NOT_PROVIDED("토큰이 제공되지 않았습니다.", HttpStatus.UNAUTHORIZED),
     ACCESS_TOKEN_EXPIRED("만료된 ACCESS 토큰입니다.", HttpStatus.UNAUTHORIZED),
     REFRESH_TOKEN_EXPIRED("만료된 REFRESH 토큰입니다.", HttpStatus.UNAUTHORIZED),
