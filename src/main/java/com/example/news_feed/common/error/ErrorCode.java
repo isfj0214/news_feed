@@ -7,6 +7,8 @@ public enum ErrorCode {
     JWT_ERROR("JWT 처리 중 오류가 발생했습니다.", HttpStatus.BAD_REQUEST),
     JWT_FORMAT_ERROR("잘못된 토큰 형식입니다.", HttpStatus.BAD_REQUEST),
     SELF_FRIEND_REQUEST("자기 자신에게 친구 요청을 할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    SELF_LIKE_REQUEST("자신의 댓글에 좋아요를 남길 수 없습니다.",HttpStatus.BAD_REQUEST),
+    ALREADY_EXIST_LIKE_REQUEST("이미 해당 댓글에 좋아요를 눌렀습니다.",HttpStatus.BAD_REQUEST),
 
     // 401 에러
     INVALID_PASSWORD("비밀번호가 잘못되었습니다.", HttpStatus.UNAUTHORIZED),
@@ -21,6 +23,7 @@ public enum ErrorCode {
     USER_ACCESS_DENIED("유저에 대한 접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
     POST_ACCESS_DENIED("게시글에 대한 접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
     COMMENT_ACCESS_DENIED("댓글에 대한 접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
+    LIKECOMMENT_ACCESS_DENIED("좋아요 작성자만 취소할 수 있습니다. ",HttpStatus.FORBIDDEN),
 
     // 404 에러
     COMMENT_NOT_FOUND("commentId에 해당하는 댓글이 없습니다.", HttpStatus.NOT_FOUND),

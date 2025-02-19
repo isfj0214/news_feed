@@ -17,9 +17,6 @@ public class LikeComment extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id",referencedColumnName = "id", nullable = false)
     private Member member;
@@ -28,6 +25,8 @@ public class LikeComment extends BaseEntity {
     @JoinColumn(name = "comment_id",referencedColumnName = "id", nullable = false)
     private Comment comment;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public LikeComment(Member member, Comment comment) {
         this.member = member;

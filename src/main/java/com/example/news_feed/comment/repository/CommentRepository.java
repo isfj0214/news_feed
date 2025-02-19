@@ -9,7 +9,4 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByPostIdAndMember_Id(Long postId, Long memberId);
-
-    Long member(Member member);
 }
