@@ -13,15 +13,19 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+<<<<<<< HEAD
+=======
+    @Column(name="id")
+>>>>>>> b735579f6d538921d0fddf41f8d5a6b3bd8c7829
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "email",nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password",nullable = false)
     private String password;
 
     public Member(String name, String email, String password) {

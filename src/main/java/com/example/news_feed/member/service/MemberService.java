@@ -1,6 +1,5 @@
 package com.example.news_feed.member.service;
 
-import com.example.news_feed.auth.entity.RefreshToken;
 import com.example.news_feed.auth.repository.RefreshTokenRepository;
 import com.example.news_feed.common.encode.PasswordEncoder;
 import com.example.news_feed.common.error.ErrorCode;
