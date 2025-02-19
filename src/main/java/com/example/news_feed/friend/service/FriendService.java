@@ -48,7 +48,7 @@ public class FriendService {
                                     .fromId(savedFriend.getFromId())
                                     .toId(savedFriend.getMember().getId())
                                     .createAt(savedFriend.getCreatedAt())
-                                    .updatedAt(savedFriend.getModifiedAt())
+                                    .modifiedAt(savedFriend.getModifiedAt())
                                     .build();
     }
 

@@ -53,11 +53,6 @@ public class AuthService {
                 .member(findMember)
                 .build());
 
-        refreshTokenRepository.save(RefreshToken.builder()
-                .token(refreshToken)
-                .member(findMember)
-                .build());
-
         return JwtTokenDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
