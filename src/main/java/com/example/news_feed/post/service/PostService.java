@@ -82,7 +82,7 @@ public class PostService {
         );
         //로그인한 멤버의 id와, 해당 게시물에 같이 저장된 멤버id 비교
         //작성한 본인만 수정할 수 있습니다. 예외코드 추가 후 변경하기!!
-        if (!memberId.equals(post.getMember().getMemberId())) {
+        if (!memberId.equals(post.getMember().getId())) {
             throw new Exception404(MEMBER_NOT_FOUND);
         }
         post.update(dto.getTitle(), dto.getContent());

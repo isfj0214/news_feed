@@ -28,7 +28,7 @@ public class MemberSaveResponseDto {
 
     public static MemberSaveResponseDto buildDto (Member member) {
         return MemberSaveResponseDto.builder()
-                .id(member.getMemberId())
+                .id(member.getId())
                 .name(member.getName())
                 .email(member.getEmail())
                 .createdAt(member.getCreatedAt())
