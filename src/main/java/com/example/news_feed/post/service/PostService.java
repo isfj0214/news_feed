@@ -108,7 +108,7 @@ public class PostService {
     }
 
     @Transactional
-    public void deleteById(Long postId, Long memberId, HttpServletRequest request) {
+    public void deleteById(Long postId, Long memberId) {
 
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new Exception404(ErrorCode.POST_NOT_FOUND)

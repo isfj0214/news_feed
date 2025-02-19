@@ -5,6 +5,7 @@ import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.common.error.exception.Exception409;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
+import com.example.news_feed.post.dto.response.PostLikeResponseDto;
 import com.example.news_feed.post.entity.PostLike;
 import com.example.news_feed.post.entity.Post;
 import com.example.news_feed.post.repository.PostLikeRepository;
@@ -12,6 +13,9 @@ import com.example.news_feed.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,18 @@ public class PostLikeService {
         PostLike postLike = new PostLike(findMember, findPost);
 
         postLikeRepository.save(postLike);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostLikeResponseDto> findAllLikes(Long postId){
+
+        Post findPost = postRepository.findById(postId).orElseThrow(() -> new Exception404(ErrorCode.POST_NOT_FOUND));
+
+        List<PostLike> postLikeResponseDtos = postLikeRepository.findAllByPost_Id(postId);
+
+        return postLikeResponseDtos.stream().map(
+                postLike -> new PostLikeResponseDto(postLike.getMember().getId())
+        ).collect(Collectors.toList());
     }
 
     @Transactional

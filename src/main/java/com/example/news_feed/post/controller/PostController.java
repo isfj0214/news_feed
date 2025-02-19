@@ -60,6 +60,6 @@ public class PostController {
             HttpServletRequest request
     ) {
         Long memberId = Long.parseLong((String) request.getAttribute("memberId"));
-        postService.deleteById(postId, memberId, request);
+        postService.deleteById(postId, memberId);
     }
 }
