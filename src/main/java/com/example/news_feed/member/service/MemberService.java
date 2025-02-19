@@ -69,7 +69,7 @@ public class MemberService {
                 member.getModifiedAt());
     }
 
-    @Transactional
+
     public MemberUpdateResponseDto update(Long id, MemberUpdateRequestDto dto) {
         Member member = memberRepository.findById(id).orElseThrow(
                 ()-> new Exception404(ErrorCode.MEMBER_NOT_FOUND)
@@ -77,7 +77,7 @@ public class MemberService {
 
         member.update(dto.getName(),dto.getEmail());
 
-        entityManager.flush();
+        memberRepository.save(member);
 
         return new MemberUpdateResponseDto(
                 member.getMemberId(),

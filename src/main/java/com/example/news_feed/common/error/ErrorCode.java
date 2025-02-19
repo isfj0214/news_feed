@@ -29,7 +29,7 @@ public enum ErrorCode {
 
     //409 에러
     EMAIL_ALREADY_EXISTS("이미 사용 중인 이메일입니다.", HttpStatus.CONFLICT),
-    ALREADY_LOGGED_IN("이미 로그인된 상태입니다.", HttpStatus.CONFLICT);;
+    ALREADY_LOGGED_IN("이미 로그인된 상태입니다.", HttpStatus.CONFLICT);
 
     private String message;
     private HttpStatus httpStatus;
