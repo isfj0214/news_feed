@@ -6,6 +6,7 @@ import com.example.news_feed.comment.dto.request.CommentUpdateRequestDto;
 import com.example.news_feed.comment.dto.response.CommentResponseDto;
 import com.example.news_feed.comment.entity.Comment;
 import com.example.news_feed.comment.repository.CommentRepository;
+import com.example.news_feed.comment.repository.LikeCommentRepository;
 import com.example.news_feed.common.error.ErrorCode;
 import com.example.news_feed.common.error.exception.Exception403;
 import com.example.news_feed.common.error.exception.Exception404;
@@ -29,6 +30,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final LikeCommentRepository likeCommentRepository;
 
     // 댓글 작성
     @Transactional
@@ -110,6 +112,7 @@ public class CommentService {
         } else if (!writer.getEmail().equals(user.getEmail())) {
             throw new Exception403(ErrorCode.COMMENT_ACCESS_DENIED);
         }
+        likeCommentRepository.deleteByCommentId(commentId);
         commentRepository.delete(findComment);
     }
 
