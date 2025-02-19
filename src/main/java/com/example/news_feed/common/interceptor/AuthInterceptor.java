@@ -28,7 +28,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if(strs[strs.length-1].equals("members") && method.equals("POST")){
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
-        else if(strs[1].equals("posts") && method.equals("GET")){
+        else if(strs[2].equals("posts") && method.equals("GET")){
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
         else if(strs[strs.length-1].equals("refresh")){
