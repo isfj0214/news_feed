@@ -7,6 +7,9 @@ import com.example.news_feed.post.dto.response.PostCreateResponseDto;
 import com.example.news_feed.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,35 +23,43 @@ public class PostController {
     private final PostService postService;
     private final JwtUtil jwtUtil;
 
-    //게시물 생성
+    //게시글 생성
     @PostMapping("/posts")
     public PostCreateResponseDto createPost(@RequestBody PostCreateRequestDto dto, HttpServletRequest request) {
         Long memberId = Long.parseLong((String) request.getAttribute("memberId"));
         return postService.createPost(dto, memberId);
     }
 
-    //모든 게시물 조회
+    //모든 게시글 조회
     @GetMapping("/posts")
-    public List<PostResponseDto> findAll() {
-        return postService.findAll();
+    public List<PostResponseDto> findAll(@PageableDefault(size = 10) Pageable pageable) {
+        return postService.findAll(pageable);
     }
 
-    //자기가 쓴 게시물만 조회니까 List로
+    //한 게시글 조회
     @GetMapping("/posts/{postId}")
     public PostResponseDto findById(@PathVariable Long postId) {
         return postService.findById(postId);
     }
 
-    //API 명세서에는 {postId}없던데,
-    // 어떤 게시물인지 알아야 수정할 수 있지 않나?
+    //작성자만 수정 가능
     @PatchMapping("/posts/{postId}")
     public PostResponseDto update(
             @PathVariable Long postId,
             @RequestBody PostCreateRequestDto dto,
             HttpServletRequest request
-            ) {
+    ) {
         Long memberId = Long.parseLong((String) request.getAttribute("memberId"));
         return postService.update(postId, memberId, dto);
+    }
 
+    //작성자만 삭제 가능
+    @DeleteMapping("/posts/{postId}")
+    public void delete(
+            @PathVariable Long postId,
+            HttpServletRequest request
+    ) {
+        Long memberId = Long.parseLong((String) request.getAttribute("memberId"));
+        postService.deleteById(postId, memberId, request);
     }
 }
