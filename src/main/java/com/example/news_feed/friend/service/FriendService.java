@@ -36,7 +36,7 @@ public class FriendService {
         //TODO : 친구 재신청 방지 기능 추가
         return FriendshipResponseDto.builder()
                                     .fromId(savedFriend.getFromId())
-                                    .toId(savedFriend.getMember().getMemberId())
+                                    .toId(savedFriend.getMember().getId())
                                     .build();
     }
 

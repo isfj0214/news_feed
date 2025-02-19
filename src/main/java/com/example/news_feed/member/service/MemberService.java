@@ -1,6 +1,5 @@
 package com.example.news_feed.member.service;
 
-import com.example.news_feed.auth.entity.RefreshToken;
 import com.example.news_feed.auth.repository.RefreshTokenRepository;
 import com.example.news_feed.common.encode.PasswordEncoder;
 import com.example.news_feed.common.error.ErrorCode;
@@ -11,8 +10,6 @@ import com.example.news_feed.member.dto.request.MemberUpdateRequestDto;
 import com.example.news_feed.member.dto.response.*;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,8 +43,8 @@ public class MemberService {
     @Transactional(readOnly = true)
     public List<MemberResponseDto> findAllMember(Long memberId) {
         return memberRepository.findAll().stream()
-                .map(member -> member.getMemberId() == memberId ? new MemberPrivateResponseDto(
-                        member.getMemberId(), member.getName(), member.getEmail(), member.getCreatedAt(), member.getModifiedAt())
+                .map(member -> member.getId() == memberId ? new MemberPrivateResponseDto(
+                        member.getId(), member.getName(), member.getEmail(), member.getCreatedAt(), member.getModifiedAt())
                         : new MemberPublicResponseDto(member.getName(), member.getEmail()))
                 .collect(Collectors.toList());
     }
@@ -62,14 +59,14 @@ public class MemberService {
         );
 
         // 타인일 시 Id와 이름 반환
-        if (!requestMemberId.equals(member.getMemberId())) {
+        if (!requestMemberId.equals(member.getId())) {
             return new MemberPublicResponseDto(
                     member.getName(),
                     member.getEmail());
         }
         // 본인일 시 전부 반환
         return new MemberPrivateResponseDto(
-                member.getMemberId(),
+                member.getId(),
                 member.getName(),
                 member.getEmail(),
                 member.getCreatedAt(),
@@ -88,7 +85,7 @@ public class MemberService {
         memberRepository.save(member);
 
         return new MemberUpdateResponseDto(
-                member.getMemberId(),
+                member.getId(),
                 member.getName(),
                 member.getEmail(),
                 member.getCreatedAt(),

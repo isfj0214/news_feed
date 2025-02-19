@@ -90,7 +90,7 @@ public class PostService {
                 () -> new Exception404(ErrorCode.POST_NOT_FOUND)
         );
 
-        if (!memberId.equals(post.getMember().getMemberId())) {
+        if (!memberId.equals(post.getMember().getId())) {
             throw new Exception403(POST_ACCESS_DENIED);
         }
 
@@ -114,7 +114,7 @@ public class PostService {
                 () -> new Exception404(ErrorCode.POST_NOT_FOUND)
         );
 
-        if (!memberId.equals(post.getMember().getMemberId())) {
+        if (!memberId.equals(post.getMember().getId())) {
             throw new Exception403(POST_ACCESS_DENIED);
         }
         postRepository.delete(post);

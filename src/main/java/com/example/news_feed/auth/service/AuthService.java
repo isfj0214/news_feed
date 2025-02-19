@@ -33,8 +33,8 @@ public class AuthService {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
 
-        String accessToken = jwtUtil.createAccessToken(findMember.getMemberId());
-        String refreshToken = jwtUtil.createRefreshToken(findMember.getMemberId());
+        String accessToken = jwtUtil.createAccessToken(findMember.getId());
+        String refreshToken = jwtUtil.createRefreshToken(findMember.getId());
 
         RefreshToken findRefreshToken = refreshTokenRepository.findByMember(findMember).orElse(null);
         if(findRefreshToken != null){
@@ -44,7 +44,7 @@ public class AuthService {
                 throw new Exception409(ErrorCode.ALREADY_LOGGED_IN);
             }catch (Exception401 e){
                 // db에 저장된 토큰이 만료되었으면 해당 토큰을 삭제
-                refreshTokenRepository.deleteByMemberId(findMember.getMemberId());
+                refreshTokenRepository.deleteByMemberId(findMember.getId());
             }
         }
 
