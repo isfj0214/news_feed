@@ -42,7 +42,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private void validateAccessToken(HttpServletRequest request, String token) {
-        if(token != null){
+        if(token != null && !token.isEmpty()){
 
             Claims claims = jwtUtil.getAccessTokenClaims(token);
             request.setAttribute("memberId", claims.getSubject());
@@ -54,7 +54,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private void validateRefreshToken(HttpServletRequest request, String token) {
-        if(token != null){
+        if(token != null && !token.isEmpty()){
 
             request.setAttribute("refreshToken", token);
 
