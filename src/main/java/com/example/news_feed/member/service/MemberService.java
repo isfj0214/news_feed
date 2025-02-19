@@ -1,15 +1,20 @@
 package com.example.news_feed.member.service;
 
 import com.example.news_feed.auth.repository.RefreshTokenRepository;
+import com.example.news_feed.comment.repository.CommentRepository;
+import com.example.news_feed.comment.repository.LikeCommentRepository;
 import com.example.news_feed.common.encode.PasswordEncoder;
 import com.example.news_feed.common.error.ErrorCode;
 import com.example.news_feed.common.error.exception.*;
+import com.example.news_feed.friend.repository.FriendRepository;
 import com.example.news_feed.member.dto.request.MemberSaveRequestDto;
 import com.example.news_feed.member.dto.request.MemberUpdatePasswordRequestDto;
 import com.example.news_feed.member.dto.request.MemberUpdateRequestDto;
 import com.example.news_feed.member.dto.response.*;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
+import com.example.news_feed.post.repository.PostLikeRepository;
+import com.example.news_feed.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +29,12 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final PostLikeRepository postLikeRepository;
+    private final FriendRepository friendRepository;
+    private final LikeCommentRepository likeCommentRepository;
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
 
     //유저 생성
     @Transactional
@@ -107,6 +118,12 @@ public class MemberService {
 
     @Transactional
     public void deleteByMemberId(Long memberId) {
+
+        postLikeRepository.deleteByMemberId(memberId);
+        friendRepository.deleteByMemberId(memberId);
+        likeCommentRepository.deleteByMemberId(memberId);
+        commentRepository.deleteByMemberId(memberId);
+        postRepository.deleteByMemberId(memberId);
 
         refreshTokenRepository.deleteByMemberId(memberId);
         Member member = memberRepository.findById(memberId).orElseThrow(
