@@ -36,8 +36,8 @@ public enum ErrorCode {
     ALREADY_LOGGED_IN("이미 로그인된 상태입니다.", HttpStatus.CONFLICT),
     USING_PASSWORD("이미 사용 중인 비밀번호 입니다.", HttpStatus.CONFLICT),
     FRIEND_REQUEST_ALREADY_EXISTS("이미 존재하는 친구 요청이 있습니다.", HttpStatus.CONFLICT),
-    ALREADY_FRIEND("이미 친구로 등록된 친구입니다.", HttpStatus.CONFLICT);
-
+    ALREADY_FRIEND("이미 친구로 등록된 친구입니다.", HttpStatus.CONFLICT),
+    ALREADY_LIKED("이미 좋아요를 눌렀습니다.", HttpStatus.CONFLICT);
 
 
     private String message;
