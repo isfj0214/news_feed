@@ -10,7 +10,10 @@ import com.example.news_feed.post.dto.response.PostResponseDto;
 import com.example.news_feed.post.dto.response.PostCreateResponseDto;
 import com.example.news_feed.post.entity.Post;
 import com.example.news_feed.post.repository.PostRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ public class PostService {
     private final MemberRepository memberRepository;
 
 
+    //게시글 생성
     @Transactional
     public PostCreateResponseDto createPost(PostCreateRequestDto dto, Long memberId) {
         Member findMember = memberRepository.findById(memberId).orElseThrow(
@@ -45,9 +49,11 @@ public class PostService {
         );
     }
 
+    //게시글 전체 조회
     @Transactional(readOnly = true)
-    public List<PostResponseDto> findAll() {
-        List<Post> posts = postRepository.findAll();
+    public List<PostResponseDto> findAll(Pageable pageable) {
+
+        Page<Post> posts = postRepository.findAll(pageable);
         List<PostResponseDto> dtos = new ArrayList<>();
 
         for (Post post : posts) {
@@ -98,6 +104,20 @@ public class PostService {
                 post.getModifiedAt()
         );
 
+
+    }
+
+    @Transactional
+    public void deleteById(Long postId, Long memberId, HttpServletRequest request) {
+
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new Exception404(ErrorCode.POST_NOT_FOUND)
+        );
+
+        if (!memberId.equals(post.getMember().getMemberId())) {
+            throw new Exception403(POST_ACCESS_DENIED);
+        }
+        postRepository.delete(post);
 
     }
 }
