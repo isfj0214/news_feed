@@ -7,6 +7,7 @@ import com.example.news_feed.friend.dto.request.FriendRequestDto;
 import com.example.news_feed.friend.dto.response.FriendRequestResponseDto;
 import com.example.news_feed.friend.dto.response.FriendResponseDto;
 import com.example.news_feed.friend.service.FriendService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,28 +24,28 @@ public class FriendController {
 
     // 친구 신청하기
     @PostMapping()
-    public ResponseEntity<FriendRequestResponseDto> request(@RequestBody FriendRequestDto friendRequestDto){
+    public ResponseEntity<FriendRequestResponseDto> request(@RequestBody @Valid FriendRequestDto friendRequestDto){
         FriendRequestResponseDto responseDto = friendService.request(friendRequestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     // 친구 신청 취소하기
     @DeleteMapping("/request")
-    public ResponseEntity<Void> cancel(@RequestBody FriendRequestCancelDto friendRequestCancelDto){
+    public ResponseEntity<Void> cancel(@RequestBody @Valid FriendRequestCancelDto friendRequestCancelDto){
         friendService.cancel(friendRequestCancelDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 친구 신청 수락하기
     @PatchMapping()
-    public ResponseEntity<Void> accept(@RequestBody FriendRequestAcceptDto acceptRequestDto){
+    public ResponseEntity<Void> accept(@RequestBody @Valid FriendRequestAcceptDto acceptRequestDto){
         friendService.accept(acceptRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 친구 삭제하기
     @DeleteMapping()
-    public ResponseEntity<Void> delete(@RequestBody FriendDeleteDto friendDeleteDto){
+    public ResponseEntity<Void> delete(@RequestBody @Valid FriendDeleteDto friendDeleteDto){
         friendService.delete(friendDeleteDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
