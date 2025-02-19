@@ -30,15 +30,20 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
-    //댓글 작성
+    // 댓글 작성
     @Transactional
     public CommentResponseDto creteComment(Long postId, Long memberId, CommentRequestDto requestDto) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
         Post post = postRepository.findById(postId).orElseThrow(() -> new Exception404(ErrorCode.POST_NOT_FOUND));
         Comment comment = new Comment(requestDto.getComment(), member, post);
+
+
         commentRepository.save(comment);
-        log.info(comment.getComment() + " " + comment.getCreatedAt() + " " + comment.getModifiedAt() + " " + comment.getLikeCount());
+
         return new CommentResponseDto(
+                comment.getPost().getId(),
+                comment.getId(),
+                comment.getMember().getEmail(),
                 comment.getComment(),
                 comment.getCreatedAt(),
                 comment.getModifiedAt(),
@@ -50,26 +55,19 @@ public class CommentService {
     public CommentResponseDto findById(Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new Exception404(ErrorCode.COMMENT_NOT_FOUND));
 
+
         return new CommentResponseDto(
+                comment.getPost().getId(),
+                comment.getId(),
+                comment.getMember().getEmail(),
                 comment.getComment(),
                 comment.getCreatedAt(),
                 comment.getModifiedAt(),
-                comment.getLikeCount());
+                comment.getLikeCount()
+                );
     }
 
-    //(본인이) 쓴 댓글만 조회
-    @Transactional
-    public List<CommentResponseDto> findAllById(Long postId, Long memberId, CommentRequestDto requestDto) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new Exception404(ErrorCode.POST_NOT_FOUND));
-        List<Comment> comments = commentRepository.findByPostIdAndMember_Id(postId, memberId);
-
-        return comments.stream()
-                .map(CommentResponseDto::toDto)
-                .collect(Collectors.toList());
-    }
-
-    //댓글 전체 조회
+    //모든 게시물의 댓글 전체 조회
     @Transactional
     public List<CommentResponseDto> findAll() {
         return commentRepository.findAll().stream().map(CommentResponseDto::toDto).toList();
@@ -83,7 +81,13 @@ public class CommentService {
         Member writer = findComment.getMember();
         Post post = postRepository.findById(postId).orElseThrow(() -> new Exception404(ErrorCode.POST_NOT_FOUND));
 
-        if (!post.getMember().getEmail().equals(user.getEmail()) || !writer.getEmail().equals(user.getEmail())) {
+        if(!postId.equals(post.getId()))
+        {
+            throw new Exception404(ErrorCode.COMMENT_NOT_FOUND);
+        }
+        if (!post.getMember().getEmail().equals(user.getEmail())) {
+            throw new Exception403(ErrorCode.COMMENT_ACCESS_DENIED);
+        } else if (!writer.getEmail().equals(user.getEmail())) {
             throw new Exception403(ErrorCode.COMMENT_ACCESS_DENIED);
         }
         findComment.setContents(requestDto.getContents());
@@ -97,7 +101,13 @@ public class CommentService {
         Member writer = memberRepository.findById(memberId).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
         Post post = postRepository.findById(postId).orElseThrow(() -> new Exception404(ErrorCode.POST_NOT_FOUND));
 
-        if (!post.getMember().getEmail().equals(user.getEmail()) || !writer.getEmail().equals(user.getEmail())) {
+        if(!postId.equals(post.getId()))
+        {
+            throw new Exception404(ErrorCode.COMMENT_NOT_FOUND);
+        }
+        if (!post.getMember().getEmail().equals(user.getEmail())) {
+            throw new Exception403(ErrorCode.COMMENT_ACCESS_DENIED);
+        } else if (!writer.getEmail().equals(user.getEmail())) {
             throw new Exception403(ErrorCode.COMMENT_ACCESS_DENIED);
         }
         commentRepository.delete(findComment);
