@@ -1,5 +1,7 @@
 package com.example.news_feed.post.service;
 
+import com.example.news_feed.comment.repository.CommentRepository;
+import com.example.news_feed.comment.repository.LikeCommentRepository;
 import com.example.news_feed.common.error.ErrorCode;
 import com.example.news_feed.common.error.exception.Exception403;
 import com.example.news_feed.common.error.exception.Exception404;
@@ -9,6 +11,7 @@ import com.example.news_feed.post.dto.request.PostCreateRequestDto;
 import com.example.news_feed.post.dto.response.PostResponseDto;
 import com.example.news_feed.post.dto.response.PostCreateResponseDto;
 import com.example.news_feed.post.entity.Post;
+import com.example.news_feed.post.repository.PostLikeRepository;
 import com.example.news_feed.post.repository.PostRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,9 @@ import static com.example.news_feed.common.error.ErrorCode.POST_ACCESS_DENIED;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final CommentRepository commentRepository;
+    private final LikeCommentRepository likeCommentRepository;
     private final MemberRepository memberRepository;
 
 
@@ -109,6 +115,17 @@ public class PostService {
 
     @Transactional
     public void deleteById(Long postId, Long memberId) {
+        List<Long> commentIds = commentRepository.findIdsByPostId(postId);
+
+        if (!commentIds.isEmpty()) {
+            likeCommentRepository.deleteByCommentIds(commentIds);
+
+            // 3️⃣ 댓글 삭제
+            commentRepository.deleteByPostId(postId);
+        }
+
+        // 4️⃣ 게시물 좋아요 삭제
+        postLikeRepository.deleteByPostId(postId);
 
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new Exception404(ErrorCode.POST_NOT_FOUND)
