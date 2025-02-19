@@ -4,11 +4,11 @@ import com.example.news_feed.comment.entity.Comment;
 import com.example.news_feed.member.entity.Member;
 
 public class LikeCommentResponseDto {
-    private Member member;
-    private Comment comment;
+    private final Long memberId;
+    private final String comment;
 
-    public LikeCommentResponseDto(Member member, Comment comment) {
-        this.member = member;
+    public LikeCommentResponseDto(Long memberId, String comment) {
+        this.memberId = memberId;
         this.comment = comment;
     }
 

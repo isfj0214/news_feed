@@ -20,24 +20,11 @@ public class LikeCommentController {
 
     //댓글 좋아요 생성
     @PostMapping
-    public ResponseEntity<LikeCommentResponseDto> addLike(
-            @PathVariable Long commentId,
-            HttpServletRequest httpServletRequest //userId
-    ) {
-        Long memberId = Long.parseLong((String) httpServletRequest.getAttribute("memberId"));
-        LikeCommentResponseDto likeCommentResponseDto = likeCommentService.addLike(commentId, memberId);
-        return new ResponseEntity<>(likeCommentResponseDto, HttpStatus.CREATED);
-    }
-
-    //(본인이)좋아요 누른 댓글만 조회
-    @GetMapping
-    public ResponseEntity<List<LikeCommentResponseDto>> likeCommentFindByUser(
+    public void addLike(
             @PathVariable Long commentId,
             HttpServletRequest httpServletRequest
     ) {
         Long memberId = Long.parseLong((String) httpServletRequest.getAttribute("memberId"));
-        List<LikeCommentResponseDto> LikeCommentResponseDtoList = likeCommentService.findByUser(memberId);
-        return new ResponseEntity<>(LikeCommentResponseDtoList, HttpStatus.OK);
     }
 
     //댓글 좋아요 취소(삭제)
