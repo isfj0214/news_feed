@@ -12,6 +12,8 @@ import com.example.news_feed.friend.entity.Friend;
 import com.example.news_feed.friend.repository.FriendRepository;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ public class FriendService {
 
     private final FriendRepository friendRepository;
     private final MemberRepository memberRepository;
+
 
     @Transactional
     public FriendRequestResponseDto request(FriendRequestDto friendRequestDto, Long memberId) {
@@ -57,7 +60,6 @@ public class FriendService {
         isFriendRequestExists(memberId, toId);
         friendRepository.deleteFriendRequest(toId, memberId);
     }
-
 
     @Transactional
     public void accept(FriendRequestAcceptDto acceptRequestDto, Long memberId) {
@@ -139,6 +141,7 @@ public class FriendService {
     private void isFriendReceivedExists(Long memberId, FriendRequestAcceptDto acceptRequestDto) {
         // 존재하지 않는 친구 신청(내가 받은 요청)을 수락하려고 하는 경우
         List<Long> friendReceivedtList = friendRepository.getFriendReceivedList(memberId);
+//        List<Long> friendReceivedtList = friendRepository.getFriendReceivedList(memberId);
         if (!friendReceivedtList.contains(acceptRequestDto.getToId())){
             throw new Exception404(ErrorCode.FRIEND_REQUEST_NOT_FOUND);
         }
