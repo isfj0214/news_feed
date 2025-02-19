@@ -50,6 +50,7 @@ public class PostService {
                 saved.getId(),
                 saved.getTitle(),
                 saved.getContent(),
+                saved.getLikeCount(),
                 saved.getCreatedAt(),
                 saved.getModifiedAt()
         );
@@ -67,6 +68,7 @@ public class PostService {
                     post.getId(),
                     post.getTitle(),
                     post.getContent(),
+                    post.getLikeCount(),
                     post.getCreatedAt(),
                     post.getModifiedAt()
             ));
@@ -83,6 +85,7 @@ public class PostService {
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
+                post.getLikeCount(),
                 post.getCreatedAt(),
                 post.getModifiedAt()
         );
@@ -106,6 +109,7 @@ public class PostService {
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
+                post.getLikeCount(),
                 post.getCreatedAt(),
                 post.getModifiedAt()
         );

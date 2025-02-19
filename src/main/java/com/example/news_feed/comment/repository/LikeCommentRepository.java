@@ -18,7 +18,6 @@ public interface LikeCommentRepository extends JpaRepository<LikeComment, Long> 
     boolean existsByMemberAndComment(Member member, Comment comment);
 
     @Modifying
-    @Transactional
     @Query("DELETE FROM LikeComment lc WHERE lc.comment.id IN :commentIds")
     void deleteByCommentIds(@Param("commentIds") List<Long> commentIds);
 
@@ -26,5 +25,10 @@ public interface LikeCommentRepository extends JpaRepository<LikeComment, Long> 
     @Modifying
     @Query("DELETE FROM LikeComment lc WHERE lc.comment.id = :commentId")
     void deleteByCommentId(@Param("commentId") Long commentId);
+
+    // Comment의 Post의 MemberId로 LikeComment 삭제
+    @Modifying
+    @Query("DELETE FROM LikeComment lc WHERE lc.comment.id IN (SELECT c.id FROM Comment c WHERE c.post.id IN (SELECT p.id FROM Post p WHERE p.member.id = :memberId))")
+    void deleteByMemberId(@Param("memberId") Long memberId);
 
 }

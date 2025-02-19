@@ -2,7 +2,6 @@ package com.example.news_feed.comment.repository;
 
 import com.example.news_feed.comment.entity.Comment;
 import com.example.news_feed.member.entity.Member;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,12 +12,14 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+    @Modifying
+    @Query("DELETE FROM Comment c WHERE c.post.id IN (SELECT p.id FROM Post p WHERE p.member.id = :memberId)")
+    void deleteByMemberId(@Param("memberId") Long memberId);
 
     @Query("SELECT c.id FROM Comment c WHERE c.post.id = :postId")
     List<Long> findIdsByPostId(@Param("postId") Long postId);
 
     @Modifying
-    @Transactional
     @Query("DELETE FROM Comment c WHERE c.post.id = :postId")
     void deleteByPostId(@Param("postId") Long postId);
 }

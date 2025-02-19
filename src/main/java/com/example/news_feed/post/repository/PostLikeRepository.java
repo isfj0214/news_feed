@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,10 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     List<PostLike> findAllByPost_Id(Long postId);
 
     @Modifying
-    @Transactional
+    @Query("DELETE FROM PostLike pl WHERE pl.member.id = :memberId")
+    void deleteByMemberId(@Param("memberId") Long memberId);
+
+    @Modifying
     @Query("DELETE FROM PostLike pl WHERE pl.post.id = :postId")
     void deleteByPostId(@Param("postId") Long postId);
 
