@@ -12,8 +12,4 @@ public class MemberUpdateRequestDto {
     @Size(min = 2, max = 20, message = "이름을 2~20자 이내로 작성해주세요.")
     private String name;
 
-    @NotBlank(message = "email은 필수 입력 값입니다.")
-    @Email(message = "유효한 email 주소를 입력해주세요.")
-    private String email;
-
 }
