@@ -33,8 +33,8 @@ public class AuthService {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
 
-        String accessToken = jwtUtil.createAccessToken(findMember.getMemberId());
-        String refreshToken = jwtUtil.createRefreshToken(findMember.getMemberId());
+        String accessToken = jwtUtil.createAccessToken(findMember.getId());
+        String refreshToken = jwtUtil.createRefreshToken(findMember.getId());
         boolean saveFlag = true;
 
         RefreshToken findRefreshToken = refreshTokenRepository.findByMember(findMember).orElse(null);

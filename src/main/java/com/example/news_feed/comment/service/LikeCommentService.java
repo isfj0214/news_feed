@@ -1,6 +1,5 @@
 package com.example.news_feed.comment.service;
 
-import com.example.news_feed.comment.dto.request.LikeCommentRequestDto;
 import com.example.news_feed.comment.dto.response.LikeCommentResponseDto;
 import com.example.news_feed.comment.entity.Comment;
 import com.example.news_feed.comment.entity.LikeComment;
@@ -11,10 +10,7 @@ import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -48,6 +44,6 @@ public class LikeCommentService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new Exception404(ErrorCode.MEMBER_NOT_FOUND));
 
         likeCommentRepository.delete(likeComment);
-        comment.likeContMinus();
+        comment.likeCountMinus();
     }
 }
