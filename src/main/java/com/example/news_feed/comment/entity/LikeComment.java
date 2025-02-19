@@ -14,17 +14,18 @@ import java.time.LocalDateTime;
 public class LikeComment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id",referencedColumnName = "id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id", nullable = false)
+    @JoinColumn(name = "comment_id",referencedColumnName = "id", nullable = false)
     private Comment comment;
 
 
@@ -33,4 +34,7 @@ public class LikeComment extends BaseEntity {
         this.comment = comment;
     }
 
+    public LikeComment() {
+
+    }
 }
