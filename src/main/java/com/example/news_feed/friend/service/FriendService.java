@@ -72,12 +72,22 @@ public class FriendService {
     public void cancel(FriendshipCancelDto friendshipCancelDto) {
         memberRepository.findById(friendshipCancelDto.getFromId()).orElseThrow(() -> new RuntimeException("회원 없음"));
         memberRepository.findById(friendshipCancelDto.getToId()).orElseThrow(() -> new RuntimeException("회원 없음"));
+        // 존재하지 않는 친구 신청(내가 보낸 요청)을 취소하려고 하는 경우
+        List<Long> friendRequestList = friendRepository.getFriendRequestList(friendshipCancelDto.getFromId());
+        if (!friendRequestList.contains(friendshipCancelDto.getToId())){
+            throw new RuntimeException("존재하지 않는 친구 신청입니다.");
+        }
         friendRepository.deleteFriendship(friendshipCancelDto.getToId(), friendshipCancelDto.getFromId());
     }
 
 
     @Transactional
     public void accept(FriendAcceptRequestDto acceptRequestDto) {
+        // 존재하지 않는 친구 신청(내가 받은 요청)을 취소하려고 하는 경우
+        List<Long> friendReceivedtList = friendRepository.getFriendReceivedList(acceptRequestDto.getFromId());
+        if (!friendReceivedtList.contains(acceptRequestDto.getToId())){
+            throw new RuntimeException("존재하지 않는 친구 신청입니다.");
+        }
         friendRepository.acceptFriendRequest(acceptRequestDto.getFromId(), acceptRequestDto.getToId());
     }
 
