@@ -5,7 +5,10 @@ import com.example.news_feed.comment.dto.request.CommentRequestDto;
 import com.example.news_feed.comment.dto.response.CommentResponseDto;
 import com.example.news_feed.comment.entity.Comment;
 import com.example.news_feed.comment.repository.CommentRepository;
+import com.example.news_feed.common.error.ErrorCode;
+import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.member.entity.Member;
+import com.example.news_feed.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
 
     //댓글 작성
     public CommentResponseDto creteComment(CommentRequestDto requestDto) {
@@ -35,7 +39,10 @@ public class CommentService {
     }
 
     //(본인이) 쓴 댓글만 조회
-
+    public List<CommentResponseDto> findAllById(Long id) {
+        commentRepository.findAll().stream();
+        return null;
+    }
 
     //댓글 전체 조회
     public List<CommentResponseDto> findAll() {
@@ -63,4 +70,5 @@ public class CommentService {
         commentRepository.delete(findComment);
 
     }
+
 }

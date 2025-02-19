@@ -1,5 +1,6 @@
 package com.example.news_feed.comment.entity;
 
+import com.example.news_feed.comment.dto.request.LikeCommentRequestDto;
 import com.example.news_feed.common.base.BaseEntity;
 import com.example.news_feed.member.entity.Member;
 import jakarta.persistence.*;
@@ -13,9 +14,6 @@ public class LikeComment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "contents")
-    private String contents;
-
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -23,6 +21,11 @@ public class LikeComment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="comment_id")
     private Comment comment;
+
+    public LikeComment(Member member, Comment comment) {
+        this.member=member;
+        this.comment = comment;
+    }
 
 
     //게시물 추가

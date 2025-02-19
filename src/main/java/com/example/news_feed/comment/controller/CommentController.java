@@ -4,6 +4,9 @@ import com.example.news_feed.comment.dto.request.CommentRequestDto;
 import com.example.news_feed.comment.dto.request.CommentUpdateRequestDto;
 import com.example.news_feed.comment.dto.response.CommentResponseDto;
 import com.example.news_feed.comment.service.CommentService;
+import com.example.news_feed.common.error.ErrorCode;
+import com.example.news_feed.common.error.exception.Exception404;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +29,7 @@ public class CommentController {
         return new ResponseEntity<>(commentSaveResponseDto, HttpStatus.CREATED);
     }
 
-    //댓글 단건 조회(ById)
+    //댓글 단건 조회(By Id)
     @GetMapping("/{id}")
     public ResponseEntity<CommentResponseDto> commentFindById(@PathVariable Long id){
         CommentResponseDto commentResponseDto = commentService.findById(id);
@@ -34,16 +37,24 @@ public class CommentController {
     }
 
     //(본인이) 쓴 댓글만 조회
-    //@GetMapping
-    //public ResponseEntity<List<CommentResponseDto>> commentFindByUser(@PathVariable)
+    @GetMapping
+    public ResponseEntity<List<CommentResponseDto>> commentFindByUser(HttpServletRequest httpServletRequest){
+        Long id = Long.parseLong((String)httpServletRequest.getAttribute("memberId"));
+        List<CommentResponseDto> CommentResponseDtoIdList = commentService.findAllById(id);
+        if(CommentResponseDtoIdList == null)
+        {
+            throw new Exception404(ErrorCode.COMMENT_NOT_FOUND);
+        }
+        return new ResponseEntity<>(CommentResponseDtoIdList,HttpStatus.OK);
+    }
 
 
     //댓글 전체 조회
     @GetMapping
     public ResponseEntity<List<CommentResponseDto>> commentFindAll(){
-        List<CommentResponseDto> scheduleResponseDtoList = commentService.findAll();
+        List<CommentResponseDto> CommentResponseDtoDtoList = commentService.findAll();
 
-        return new ResponseEntity<>(scheduleResponseDtoList, HttpStatus.OK);
+        return new ResponseEntity<>(CommentResponseDtoDtoList, HttpStatus.OK);
     }
 
     //댓글 수정
