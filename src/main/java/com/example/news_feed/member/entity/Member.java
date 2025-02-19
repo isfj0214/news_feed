@@ -13,7 +13,10 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+<<<<<<< HEAD
+=======
     @Column(name="id")
+>>>>>>> b735579f6d538921d0fddf41f8d5a6b3bd8c7829
     private Long id;
 
     @Column(name="name", nullable = false)
