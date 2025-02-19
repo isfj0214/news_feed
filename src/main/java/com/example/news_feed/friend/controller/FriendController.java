@@ -1,8 +1,6 @@
 package com.example.news_feed.friend.controller;
 
 import com.example.news_feed.friend.dto.request.FriendRequestAcceptDto;
-import com.example.news_feed.friend.dto.request.FriendRequestCancelDto;
-import com.example.news_feed.friend.dto.request.FriendDeleteDto;
 import com.example.news_feed.friend.dto.request.FriendRequestDto;
 import com.example.news_feed.friend.dto.response.FriendRequestResponseDto;
 import com.example.news_feed.friend.dto.response.FriendResponseDto;
@@ -33,11 +31,10 @@ public class FriendController {
     }
 
     // 친구 신청 취소하기
-    @DeleteMapping("/request")
-    public ResponseEntity<Void> cancel(@RequestBody @Valid FriendRequestCancelDto friendRequestCancelDto,
-                                       HttpServletRequest request){
+    @DeleteMapping("/invitation/{toId}")
+    public ResponseEntity<Void> cancel(@PathVariable Long toId, HttpServletRequest request){
         Long memberId = Long.parseLong((String)request.getAttribute("memberId"));
-        friendService.cancel(friendRequestCancelDto, memberId);
+        friendService.cancel(toId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -51,11 +48,10 @@ public class FriendController {
     }
 
     // 친구 삭제하기
-    @DeleteMapping()
-    public ResponseEntity<Void> delete(@RequestBody @Valid FriendDeleteDto friendDeleteDto,
-                                       HttpServletRequest request){
+    @DeleteMapping("/{toId}")
+    public ResponseEntity<Void> delete(@PathVariable Long toId, HttpServletRequest request){
         Long memberId = Long.parseLong((String)request.getAttribute("memberId"));
-        friendService.delete(friendDeleteDto, memberId);
+        friendService.delete(toId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
