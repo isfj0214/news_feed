@@ -37,47 +37,39 @@ public class MemberController {
 
     // 유저 전체 조회
     @GetMapping
-    public ResponseEntity<List<MemberResponseDto>> findAllMember(
-            @RequestHeader("Authorization")String token) {
-        String extractedToken = token.replace("Bearer","");
-        jwtUtil.getAccessTokenClaims(extractedToken); // 토큰 검증(로그인 된 사용자만 조회 가능)
-
-        return ResponseEntity.ok(memberService.findAllMember());
+    public ResponseEntity<List<MemberResponseDto>> findAllMember(HttpServletRequest request)
+    {
+        Long memberId = Long.parseLong((String)request.getAttribute("memberId"));
+        return ResponseEntity.ok(memberService.findAllMember(memberId));
     }
 
     // 유저 단건 조회
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberResponseDto> findByIdMember(
-            @PathVariable Long id,
-            @RequestHeader ("Authorization") String token) {
+            @PathVariable Long memberId, HttpServletRequest request) {
 
-        String extractedToken = token.replace("Bearer", "");
-        Long requesterId = Long.parseLong(jwtUtil.getAccessTokenClaims(extractedToken).getSubject());
+        Long requestMemberId = Long.parseLong((String)request.getAttribute("memberId"));
 
-        return ResponseEntity.ok(memberService.findByIdMember(id, requesterId));
+        return ResponseEntity.ok(memberService.findByMemberId(memberId, requestMemberId));
     }
 
     // 프로필 수정(이름, 이메일 수정)
     @PatchMapping
-    public ResponseEntity<MemberUpdateResponseDto> update(
-            @RequestBody MemberUpdateRequestDto dto,
-            @RequestHeader("Authorization")String token) {
+    public ResponseEntity<MemberUpdateResponseDto> updateName(
+            @RequestBody MemberUpdateRequestDto dto, HttpServletRequest request)
 
-        String extractedToken = token.replace("Bearer","");
-        Long memberId = Long.parseLong(jwtUtil.getAccessTokenClaims(extractedToken).getSubject());
-        return ResponseEntity.ok(memberService.update(memberId, dto, memberId));
+    {
+        Long memberId = Long.parseLong((String)request.getAttribute("memberId"));
+        return ResponseEntity.ok(memberService.updateName(memberId, dto));
     }
 
     // 비밀번호 수정
     @PatchMapping("/password")
     public ResponseEntity<Map<String, String>> updatePassword(
-            @RequestBody MemberUpdatePasswordRequestDto dto,
-            @RequestHeader("Authorization")String token) {
+            @RequestBody MemberUpdatePasswordRequestDto dto, HttpServletRequest request) {
 
-        String extractedToken = token.replace("Bearer","");
-        Long memberId = Long.parseLong(jwtUtil.getAccessTokenClaims(extractedToken).getSubject());
-
-        memberService.updatePassword(memberId, dto, memberId);
+        Long memberId = Long.parseLong((String)request.getAttribute("memberId"));
+        memberService.updatePassword(memberId, dto);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "비밀번호가 성공적으로 변경되었습니다.");
@@ -88,7 +80,7 @@ public class MemberController {
     @DeleteMapping
     public void delete(HttpServletRequest httpServletRequest) {
         Long memberId = Long.parseLong((String)httpServletRequest.getAttribute("memberId"));
-        memberService.deleteByIdMember(memberId);
+        memberService.deleteByMemberId(memberId);
     }
 
 }
