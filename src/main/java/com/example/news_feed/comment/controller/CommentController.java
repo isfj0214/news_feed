@@ -8,7 +8,6 @@ import com.example.news_feed.common.error.ErrorCode;
 import com.example.news_feed.common.error.exception.Exception404;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +35,8 @@ public class CommentController {
 
     //댓글 단건 조회(By commentId)
     @GetMapping("/{id}")
-    public ResponseEntity<CommentResponseDto> commentFindById(@PathVariable Long commentId) {
-        CommentResponseDto commentResponseDto = commentService.findById(commentId);
+    public ResponseEntity<CommentResponseDto> commentFindById(@PathVariable Long id) {
+        CommentResponseDto commentResponseDto = commentService.findById(id);
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 

@@ -6,5 +6,5 @@ import com.example.news_feed.member.entity.Member;
 
 @Getter
 public class CommentRequestDto {
-    private String contents;
+    private String comment;
 }

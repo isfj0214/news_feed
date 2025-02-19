@@ -23,9 +23,11 @@ public enum ErrorCode {
 
     // 404 에러
     COMMENT_NOT_FOUND("commentId에 해당하는 댓글이 없습니다.", HttpStatus.NOT_FOUND),
+    LIKECOMMENT_NOT_FOUND("likecommentId에 해당하는 댓글이 없습니다.",HttpStatus.NOT_FOUND),
     POST_NOT_FOUND("postId에 해당하는 일정이 없습니다.", HttpStatus.NOT_FOUND),
     MEMBER_NOT_FOUND("memberId에 해당하는 멤버가 없습니다.", HttpStatus.NOT_FOUND),
     USER_NOT_FOUND_BY_EMAIL("해당 이메일로 등록된 유저가 없습니다.", HttpStatus.NOT_FOUND),
+
 
     //409 에러
     EMAIL_ALREADY_EXISTS("이미 사용 중인 이메일입니다.", HttpStatus.CONFLICT),

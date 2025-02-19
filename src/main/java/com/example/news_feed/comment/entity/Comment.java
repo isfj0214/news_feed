@@ -6,6 +6,8 @@ import com.example.news_feed.post.entity.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Table(name = "comments")
@@ -15,19 +17,26 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "contents")
-    private String contents;
+    @Column(name = "comment", nullable = false)
+    private String comment;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    //게시물 외래키 추가
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Comment(String contents, Member member, Post post) {
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
+
+    private int likeCount;
+
+    public Comment(String comment, Member member, Post post) {
 
     }
 
@@ -36,9 +45,19 @@ public class Comment extends BaseEntity {
 
     }
 
-    public void setContents(String contents)
+    public void setContents(String comment)
     {
-        this.contents = contents;
+        this.comment = comment;
+    }
+
+    public void likeCountPlus()
+    {
+        this.likeCount++;
+    }
+
+    public void likeContMinus()
+    {
+        this.likeCount--;
     }
 
 }
