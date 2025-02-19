@@ -40,7 +40,6 @@ public class MemberService {
         return MemberSaveResponseDto.buildDto(savedMember);
     }
 
-    // 프로필 전체 조회 (본인일 시 전체 정보반환 / 타인일 시 부분 정보반환)
     @Transactional(readOnly = true)
     public List<MemberResponseDto> findAllMember(Long memberId) {
         return memberRepository.findAll().stream()
@@ -115,4 +114,5 @@ public class MemberService {
         );
         memberRepository.deleteById(memberId);
     }
+
 }

@@ -10,14 +10,14 @@ public class FriendRequestResponseDto {
     private final Long fromId; // 친구 신청을 보내는 사람 id
     private final Long toId; // 친구 요청을 받는 사람 id
     private final LocalDateTime createAt;
-    private final LocalDateTime updatedAt;
+    private final LocalDateTime modifiedAt;
 
     @Builder
-    public FriendRequestResponseDto(Long fromId, Long toId, LocalDateTime createAt, LocalDateTime updatedAt) {
+    public FriendRequestResponseDto(Long fromId, Long toId, LocalDateTime createAt, LocalDateTime modifiedAt) {
         this.fromId = fromId;
         this.toId = toId;
         this.createAt = createAt;
-        this.updatedAt = updatedAt;
+        this.modifiedAt = modifiedAt;
     }
 
 }

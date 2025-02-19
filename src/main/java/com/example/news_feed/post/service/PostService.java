@@ -1,5 +1,7 @@
 package com.example.news_feed.post.service;
 
+import com.example.news_feed.common.error.ErrorCode;
+import com.example.news_feed.common.error.exception.Exception403;
 import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.news_feed.common.error.ErrorCode.MEMBER_NOT_FOUND;
+import static com.example.news_feed.common.error.ErrorCode.POST_ACCESS_DENIED;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +52,7 @@ public class PostService {
     //게시글 전체 조회
     @Transactional(readOnly = true)
     public List<PostResponseDto> findAll(Pageable pageable) {
-//        List<Post> posts = postRepository.findAll();
+
         Page<Post> posts = postRepository.findAll(pageable);
         List<PostResponseDto> dtos = new ArrayList<>();
 
@@ -68,7 +71,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDto findById(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new Exception404(MEMBER_NOT_FOUND)
+                () -> new Exception404(ErrorCode.POST_NOT_FOUND)
         );
         return new PostResponseDto(
                 post.getId(),
@@ -82,15 +85,15 @@ public class PostService {
 
     public PostResponseDto update(Long postId, Long memberId, PostCreateRequestDto dto) {
 
-        //오류코드로 게시물이 없습니다. 추가하고 변경하기!!
+
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new Exception404(MEMBER_NOT_FOUND)
+                () -> new Exception404(ErrorCode.POST_NOT_FOUND)
         );
-        //로그인한 멤버의 id와, 해당 게시물에 같이 저장된 멤버id 비교
-        //작성한 본인만 수정할 수 있습니다. 예외코드 추가 후 변경하기!!
+
         if (!memberId.equals(post.getMember().getId())) {
-            throw new Exception404(MEMBER_NOT_FOUND);
+            throw new Exception403(POST_ACCESS_DENIED);
         }
+
         post.update(dto.getTitle(), dto.getContent());
         postRepository.save(post);
         return new PostResponseDto(
@@ -105,16 +108,16 @@ public class PostService {
     }
 
     @Transactional
-    public void deleteById(Long postId, Long memberId, HttpServletRequest request) {
-        //오류메세지 변경 필요
-        //게시물 생성한 멤버Id와
+    public void deleteById(Long postId, Long memberId) {
+
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new Exception404(MEMBER_NOT_FOUND)
+                () -> new Exception404(ErrorCode.POST_NOT_FOUND)
         );
-        //현재 로그인 한 유저의 엑세스 토큰의 memberId 일치 여부 확인
+
         if (!memberId.equals(post.getMember().getId())) {
-            throw new Exception404(MEMBER_NOT_FOUND);
+            throw new Exception403(POST_ACCESS_DENIED);
         }
         postRepository.delete(post);
+
     }
 }

@@ -46,7 +46,7 @@ public class FriendService {
                                     .fromId(savedFriend.getFromId())
                                     .toId(savedFriend.getMember().getId())
                                     .createAt(savedFriend.getCreatedAt())
-                                    .updatedAt(savedFriend.getModifiedAt())
+                                    .modifiedAt(savedFriend.getModifiedAt())
                                     .build();
     }
 
@@ -57,6 +57,7 @@ public class FriendService {
         isFriendRequestExists(memberId, toId);
         friendRepository.deleteFriendRequest(toId, memberId);
     }
+
 
     @Transactional
     public void accept(FriendRequestAcceptDto acceptRequestDto, Long memberId) {
