@@ -2,6 +2,7 @@ package com.example.news_feed.friend.controller;
 
 import com.example.news_feed.friend.dto.request.FriendAcceptRequestDto;
 import com.example.news_feed.friend.dto.request.FriendshipCancelDto;
+import com.example.news_feed.friend.dto.request.FriendshipDeleteDto;
 import com.example.news_feed.friend.dto.request.FriendshipRequestDto;
 import com.example.news_feed.friend.dto.response.FriendshipResponseDto;
 import com.example.news_feed.friend.service.FriendService;
@@ -27,7 +28,7 @@ public class FriendController {
     }
 
     // 친구 신청 취소하기
-    @DeleteMapping()
+    @DeleteMapping("/request")
     public ResponseEntity<Void> cancel(@RequestBody FriendshipCancelDto friendshipCancelDto){
         friendService.cancel(friendshipCancelDto);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -37,6 +38,13 @@ public class FriendController {
     @PatchMapping()
     public ResponseEntity<Void> accept(@RequestBody FriendAcceptRequestDto acceptRequestDto){
         friendService.accept(acceptRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 친구 삭제하기
+    @DeleteMapping()
+    public ResponseEntity<Void> delete(@RequestBody FriendshipDeleteDto friendshipDeleteDto){
+        friendService.delete(friendshipDeleteDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

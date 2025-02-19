@@ -2,6 +2,7 @@ package com.example.news_feed.friend.service;
 
 import com.example.news_feed.friend.dto.request.FriendAcceptRequestDto;
 import com.example.news_feed.friend.dto.request.FriendshipCancelDto;
+import com.example.news_feed.friend.dto.request.FriendshipDeleteDto;
 import com.example.news_feed.friend.dto.request.FriendshipRequestDto;
 import com.example.news_feed.friend.dto.response.FriendshipResponseDto;
 import com.example.news_feed.friend.entity.Friend;
@@ -91,6 +92,16 @@ public class FriendService {
         friendRepository.acceptFriendRequest(acceptRequestDto.getFromId(), acceptRequestDto.getToId());
     }
 
+    @Transactional
+    public void delete(FriendshipDeleteDto friendshipDeleteDto) {
+        // 존재하지 않는 친구 신청(내가 받은 요청)을 취소하려고 하는 경우
+        List<Long> friendList = friendRepository.getFriendList(friendshipDeleteDto.getFromId());
+        if (!friendList.contains(friendshipDeleteDto.getToId())){
+            throw new RuntimeException("존재하지 않는 친구는 삭제할 수 없습니다.");
+        }
+        friendRepository.deleteFriendship(friendshipDeleteDto.getToId(), friendshipDeleteDto.getFromId());
+    }
+
 
     @Transactional(readOnly = true)
     public List<Long> getFriendRequestList(Long id) {
@@ -109,4 +120,5 @@ public class FriendService {
         List<Long> friendList = friendRepository.getFriendList(id);
         return friendList;
     }
+
 }
