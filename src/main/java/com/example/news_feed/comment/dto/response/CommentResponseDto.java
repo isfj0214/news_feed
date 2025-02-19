@@ -5,14 +5,13 @@ import com.example.news_feed.member.entity.Member;
 
 public class CommentResponseDto {
     private String contents;
-    private Member member;
-    public CommentResponseDto(String contents, Member member) {
+
+    public CommentResponseDto(String contents) {
         this.contents = contents;
-        this.member = member;
     }
 
 
     public static CommentResponseDto toDto(Comment comment) {
-        return new CommentResponseDto(comment.getContents(),comment.getMember());
+        return new CommentResponseDto(comment.getContents());
     }
 }

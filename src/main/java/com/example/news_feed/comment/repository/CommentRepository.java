@@ -1,14 +1,15 @@
 package com.example.news_feed.comment.repository;
 
 import com.example.news_feed.comment.entity.Comment;
+import com.example.news_feed.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+import java.util.List;
 
-    default Comment findByIdOrElseThrow(Long id)
-    {
-        return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
-    }
+public interface CommentRepository extends JpaRepository<Comment, Long> {
+    List<Comment> findByPostIdAndMemberId(Long postId, Long memberId);
+
+    Long member(Member member);
 }
