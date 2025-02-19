@@ -42,7 +42,7 @@ public class FriendService {
 
         return FriendRequestResponseDto.builder()
                                     .fromId(savedFriend.getFromId())
-                                    .toId(savedFriend.getMember().getId())
+                                    .toId(savedFriend.getMember().getMemberId())
                                     .build();
     }
 

@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "member")
 public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long memberId;
 
     @Column(nullable = false)
     private String name;
@@ -29,8 +30,12 @@ public class Member extends BaseEntity {
         this.password = password;
     }
 
-    public Member() {
+    public void update(String name) {
+        this.name = name;
     }
 
 
+    public void updatePassword(String encodePassword) {
+        this.password = encodePassword;
+    }
 }
