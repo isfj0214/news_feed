@@ -1,5 +1,7 @@
 package com.example.news_feed.post.service;
 
+import com.example.news_feed.common.error.ErrorCode;
+import com.example.news_feed.common.error.exception.Exception403;
 import com.example.news_feed.common.error.exception.Exception404;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.news_feed.common.error.ErrorCode.MEMBER_NOT_FOUND;
+import static com.example.news_feed.common.error.ErrorCode.POST_ACCESS_DENIED;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +65,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDto findById(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new Exception404(MEMBER_NOT_FOUND)
+                () -> new Exception404(ErrorCode.POST_NOT_FOUND)
         );
         return new PostResponseDto(
                 post.getId(),
@@ -76,15 +79,15 @@ public class PostService {
 
     public PostResponseDto update(Long postId, Long memberId, PostCreateRequestDto dto) {
 
-        //오류코드로 게시물이 없습니다. 추가하고 변경하기!!
+
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new Exception404(MEMBER_NOT_FOUND)
+                () -> new Exception404(ErrorCode.POST_NOT_FOUND)
         );
-        //로그인한 멤버의 id와, 해당 게시물에 같이 저장된 멤버id 비교
-        //작성한 본인만 수정할 수 있습니다. 예외코드 추가 후 변경하기!!
+
         if (!memberId.equals(post.getMember().getMemberId())) {
-            throw new Exception404(MEMBER_NOT_FOUND);
+            throw new Exception403(POST_ACCESS_DENIED);
         }
+
         post.update(dto.getTitle(), dto.getContent());
         postRepository.save(post);
         return new PostResponseDto(
