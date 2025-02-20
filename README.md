@@ -1,6 +1,8 @@
 ## 제목 : News feed
 ---
 
+### 요구사항
+
 [요구사항](https://teamsparta.notion.site/Spring-5-19e2dc3ef514806f8783ed137efd365e)
 
 ### 주요 기능
