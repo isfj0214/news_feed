@@ -1,11 +1,14 @@
 ## 제목 : News feed
 ---
 프로필 조회 및 수정 기능, 게시물 작성, 조회, 최신 순 기준 정렬, 좋아요 수 기준 정렬, 기간별 정렬 기능,  수정, 삭제, 기능, 회원가입 및 탈퇴 기능, 친구 추가 및 삭제 기능, 댓글 작성, 조회, 수정, 삭제 기능, 게시글 및 댓글 좋아요 생성 및 삭제 기능을 구현했습니다.
+
+[요구사항](https://teamsparta.notion.site/Spring-5-19e2dc3ef514806f8783ed137efd365e)
+
 ### ERD
 ![뉴스피드 ERD](https://github.com/user-attachments/assets/ff995ae7-390e-4eb3-9094-eae3418d162a)
 
 ### API 명세서
-[노션 페이지](https://www.notion.so/teamsparta/API-19a2dc3ef5148022a30cf29137e45dd9)
+[노션 페이지](https://teamsparta.notion.site/API-19a2dc3ef5148022a30cf29137e45dd9)
 #### 주요 기능 설명
 ##### JWT로 사용자 인증 기능 구현
 1. access 토큰을 사용해서 인증을 처리한다.
