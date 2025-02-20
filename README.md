@@ -1,5 +1,8 @@
 ## 제목 : News feed
 ---
+
+[요구사항](https://teamsparta.notion.site/Spring-5-19e2dc3ef514806f8783ed137efd365e)
+
 ### 주요 기능
 
 - 로그인 로그아웃 기능
@@ -9,8 +12,6 @@
 - 친구 추가 및 삭제 기능
 - 댓글 작성, 조회, 수정, 삭제 기능
 - 게시글 및 댓글 좋아요 생성 및 삭제 기능
-
-[요구사항](https://teamsparta.notion.site/Spring-5-19e2dc3ef514806f8783ed137efd365e)
 
 ### ERD
 ![뉴스피드 ERD](https://github.com/user-attachments/assets/ff995ae7-390e-4eb3-9094-eae3418d162a)
