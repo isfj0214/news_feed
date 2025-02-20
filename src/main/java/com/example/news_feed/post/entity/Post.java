@@ -20,6 +20,8 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "memberId", nullable = false)
     private Member member;
 
+    private Long likeCount = 0L;
+
     public Post(String title, String content, Member member) {
         this.title = title;
         this.content = content;
@@ -29,5 +31,13 @@ public class Post extends BaseEntity {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void addLikeCount(){
+        likeCount++;
+    }
+
+    public void minusLikeCount(){
+        likeCount--;
     }
 }

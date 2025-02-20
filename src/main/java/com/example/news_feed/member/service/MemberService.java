@@ -1,16 +1,20 @@
 package com.example.news_feed.member.service;
 
-import com.example.news_feed.auth.entity.RefreshToken;
 import com.example.news_feed.auth.repository.RefreshTokenRepository;
+import com.example.news_feed.comment.repository.CommentRepository;
+import com.example.news_feed.comment.repository.LikeCommentRepository;
 import com.example.news_feed.common.encode.PasswordEncoder;
 import com.example.news_feed.common.error.ErrorCode;
 import com.example.news_feed.common.error.exception.*;
+import com.example.news_feed.friend.repository.FriendRepository;
 import com.example.news_feed.member.dto.request.MemberSaveRequestDto;
 import com.example.news_feed.member.dto.request.MemberUpdatePasswordRequestDto;
 import com.example.news_feed.member.dto.request.MemberUpdateRequestDto;
 import com.example.news_feed.member.dto.response.*;
 import com.example.news_feed.member.entity.Member;
 import com.example.news_feed.member.repository.MemberRepository;
+import com.example.news_feed.post.repository.PostLikeRepository;
+import com.example.news_feed.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +29,12 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final PostLikeRepository postLikeRepository;
+    private final FriendRepository friendRepository;
+    private final LikeCommentRepository likeCommentRepository;
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
 
     //유저 생성
     @Transactional
@@ -41,12 +51,11 @@ public class MemberService {
         return MemberSaveResponseDto.buildDto(savedMember);
     }
 
-    // 프로필 전체 조회 (본인일 시 전체 정보반환 / 타인일 시 부분 정보반환)
     @Transactional(readOnly = true)
     public List<MemberResponseDto> findAllMember(Long memberId) {
         return memberRepository.findAll().stream()
-                .map(member -> member.getMemberId() == memberId ? new MemberPrivateResponseDto(
-                        member.getMemberId(), member.getName(), member.getEmail(), member.getCreatedAt(), member.getModifiedAt())
+                .map(member -> member.getId() == memberId ? new MemberPrivateResponseDto(
+                        member.getId(), member.getName(), member.getEmail(), member.getCreatedAt(), member.getModifiedAt())
                         : new MemberPublicResponseDto(member.getName(), member.getEmail()))
                 .collect(Collectors.toList());
     }
@@ -61,14 +70,14 @@ public class MemberService {
         );
 
         // 타인일 시 Id와 이름 반환
-        if (!requestMemberId.equals(member.getMemberId())) {
+        if (!requestMemberId.equals(member.getId())) {
             return new MemberPublicResponseDto(
                     member.getName(),
                     member.getEmail());
         }
         // 본인일 시 전부 반환
         return new MemberPrivateResponseDto(
-                member.getMemberId(),
+                member.getId(),
                 member.getName(),
                 member.getEmail(),
                 member.getCreatedAt(),
@@ -87,7 +96,7 @@ public class MemberService {
         memberRepository.save(member);
 
         return new MemberUpdateResponseDto(
-                member.getMemberId(),
+                member.getId(),
                 member.getName(),
                 member.getEmail(),
                 member.getCreatedAt(),
@@ -110,10 +119,17 @@ public class MemberService {
     @Transactional
     public void deleteByMemberId(Long memberId) {
 
+        postLikeRepository.deleteByMemberId(memberId);
+        friendRepository.deleteByMemberId(memberId);
+        likeCommentRepository.deleteByMemberId(memberId);
+        commentRepository.deleteByMemberId(memberId);
+        postRepository.deleteByMemberId(memberId);
+
         refreshTokenRepository.deleteByMemberId(memberId);
         Member member = memberRepository.findById(memberId).orElseThrow(
                 ()-> new Exception404(ErrorCode.MEMBER_NOT_FOUND)
         );
         memberRepository.deleteById(memberId);
     }
+
 }

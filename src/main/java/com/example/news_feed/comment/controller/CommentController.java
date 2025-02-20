@@ -1,5 +1,6 @@
 package com.example.news_feed.comment.controller;
 
+import com.example.news_feed.auth.JwtUtil;
 import com.example.news_feed.comment.dto.request.CommentRequestDto;
 import com.example.news_feed.comment.dto.request.CommentUpdateRequestDto;
 import com.example.news_feed.comment.dto.response.CommentResponseDto;
@@ -7,25 +8,30 @@ import com.example.news_feed.comment.service.CommentService;
 import com.example.news_feed.common.error.ErrorCode;
 import com.example.news_feed.common.error.exception.Exception404;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/posts/{postId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
+    private final JwtUtil jwtUtil;
 
     //댓글 작성
     @PostMapping
     public ResponseEntity<CommentResponseDto> commentSave(
             @PathVariable Long postId,
-            @RequestBody CommentRequestDto requestDto,
+            @Valid @RequestBody CommentRequestDto requestDto,
             HttpServletRequest httpServletRequest
     ) {
         Long memberId = Long.parseLong((String) httpServletRequest.getAttribute("memberId"));
@@ -40,23 +46,7 @@ public class CommentController {
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 
-    //한 게시물에서 (본인이) 쓴 댓글만 조회
-    @GetMapping
-    public ResponseEntity<List<CommentResponseDto>> commentFindByUser(
-            @PathVariable Long postId,
-            @RequestBody CommentRequestDto requestDto,
-            HttpServletRequest httpServletRequest
-    ) {
-        Long memberId = Long.parseLong((String) httpServletRequest.getAttribute("memberId"));
-        List<CommentResponseDto> CommentResponseDtoIdList = commentService.findAllById(postId, memberId, requestDto);
-        if (CommentResponseDtoIdList == null) {
-            throw new Exception404(ErrorCode.COMMENT_NOT_FOUND);
-        }
-        return new ResponseEntity<>(CommentResponseDtoIdList, HttpStatus.OK);
-    }
-
-
-    //댓글 전체 조회
+    //모든 게시물의 댓글 전체 조회
     @GetMapping
     public ResponseEntity<List<CommentResponseDto>> commentFindAll() {
         List<CommentResponseDto> CommentResponseDtoDtoList = commentService.findAll();

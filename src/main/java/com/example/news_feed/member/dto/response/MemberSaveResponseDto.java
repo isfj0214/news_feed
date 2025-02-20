@@ -15,24 +15,24 @@ public class MemberSaveResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime createdAt;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private final LocalDateTime updatedAt;
+    private final LocalDateTime modifiedAt;
 
     @Builder
-    public MemberSaveResponseDto(Long id, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public MemberSaveResponseDto(Long id, String name, String email, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public static MemberSaveResponseDto buildDto (Member member) {
         return MemberSaveResponseDto.builder()
-                .id(member.getMemberId())
+                .id(member.getId())
                 .name(member.getName())
                 .email(member.getEmail())
                 .createdAt(member.getCreatedAt())
-                .updatedAt(member.getModifiedAt())
+                .modifiedAt(member.getModifiedAt())
                 .build();
     }
 
