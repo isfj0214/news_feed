@@ -19,13 +19,11 @@ public class LikeComment extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id",referencedColumnName = "id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_likecomments_comment", foreignKeyDefinition = "FOREIGN KEY (comment_id) REFERENCES comments (id) ON DELETE CASCADE"))
+    @JoinColumn(name = "member_id",referencedColumnName = "id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id",referencedColumnName = "id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_likecomments_comment", foreignKeyDefinition = "FOREIGN KEY (comment_id) REFERENCES comments (id) ON DELETE CASCADE"))
+    @JoinColumn(name = "comment_id",referencedColumnName = "id", nullable = false)
     private Comment comment;
 
     @Column(name = "created_at")

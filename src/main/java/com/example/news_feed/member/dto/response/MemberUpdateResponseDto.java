@@ -13,13 +13,13 @@ public class MemberUpdateResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime createdAt;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private final LocalDateTime updatedAt;
+    private final LocalDateTime modifiedAt;
 
-    public MemberUpdateResponseDto(Long id, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public MemberUpdateResponseDto(Long id, String name, String email, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.modifiedAt = modifiedAt;
     }
 }
